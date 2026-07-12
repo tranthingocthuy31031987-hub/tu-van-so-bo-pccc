@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tư vấn sơ bộ PCCC — QCVN 10:2025/BCA & NĐ 105/2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBFAF6;
+  --card:#FFFFFF;
+  --ink:#1C2733;
+  --ink-soft:#4A5768;
+  --line:#DDD9CE;
+  --line-soft:#ECE9E0;
+  --red:#B3282D;          /* đỏ dấu mộc */
+  --red-deep:#8E1F23;
+  --red-wash:#FBEFEF;
+  --amber:#8A5A0B;
+  --amber-wash:#FDF4DF;
+  --green:#1E6B41;
+  --green-wash:#EAF4EE;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Be Vietnam Pro',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{
+  font-family:var(--sans);
+  background:var(--paper);
+  color:var(--ink);
+  font-size:15.5px;
+  line-height:1.65;
+}
+.wrap{max-width:880px;margin:0 auto;padding:28px 20px 80px}
+
+/* ---------- Đầu trang ---------- */
+.masthead{border-bottom:3px double var(--ink);padding-bottom:18px;margin-bottom:26px}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:600}
+h1{font-weight:800;font-size:clamp(26px,4.6vw,38px);letter-spacing:-.015em;line-height:1.15;margin:6px 0 8px}
+.masthead p{color:var(--ink-soft);font-size:14px;max-width:640px}
+.legal-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.legal-tags span{font-family:var(--mono);font-size:11.5px;border:1px solid var(--line);background:var(--card);padding:3px 9px;border-radius:3px;color:var(--ink-soft)}
+
+/* ---------- Form ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:24px 24px 20px;box-shadow:0 1px 0 rgba(28,39,51,.04)}
+fieldset{border:none;margin-bottom:18px}
+legend{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--red);border-bottom:1px solid var(--line-soft);width:100%;padding-bottom:6px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 18px}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:4px}
+.field.full{grid-column:1/-1}
+label{font-size:13.5px;font-weight:600}
+label .req{color:var(--red)}
+label .hint{display:block;font-weight:400;font-size:12px;color:var(--ink-soft)}
+input,select{
+  font-family:var(--sans);font-size:15px;color:var(--ink);
+  border:1px solid var(--line);border-radius:4px;background:#FDFDFB;
+  padding:9px 11px;width:100%;
+}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--red);outline-offset:1px;border-color:var(--red)}
+input.err{border-color:var(--red);background:var(--red-wash)}
+.form-msg{display:none;margin-top:10px;font-size:13.5px;color:var(--red-deep);background:var(--red-wash);border:1px solid #E6C6C6;border-radius:4px;padding:10px 12px}
+.form-msg.show{display:block}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;align-items:center}
+button{font-family:var(--sans);cursor:pointer;border-radius:4px;font-weight:700;font-size:15px}
+.btn-main{background:var(--red);color:#fff;border:1px solid var(--red-deep);padding:11px 26px;letter-spacing:.02em}
+.btn-main:hover{background:var(--red-deep)}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);padding:10px 18px;font-weight:600}
+.btn-ghost:hover{border-color:var(--ink)}
+
+/* ---------- Phiếu kết quả ---------- */
+#phieu{display:none;margin-top:34px}
+#phieu.show{display:block}
+.phieu-head{border:1.5px solid var(--ink);border-radius:6px;background:var(--card);padding:20px 22px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.phieu-head h2{font-size:20px;font-weight:800;letter-spacing:.01em}
+.phieu-head .sub{font-size:13px;color:var(--ink-soft);margin-top:2px}
+.phieu-meta{font-family:var(--mono);font-size:12.5px;text-align:right;color:var(--ink-soft);line-height:1.8}
+.phieu-meta b{color:var(--ink)}
+
+section.buoc{margin-top:26px}
+.buoc-tag{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.buoc-tag .num{font-family:var(--mono);font-size:12px;font-weight:600;color:#fff;background:var(--ink);padding:3px 9px;border-radius:3px;letter-spacing:.1em}
+.buoc-tag h3{font-size:17px;font-weight:700}
+.buoc .card{padding:18px 20px}
+
+/* Con dấu kết luận */
+.stamp-row{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.stamp{
+  border:3px double var(--red);color:var(--red);
+  font-weight:800;font-size:19px;letter-spacing:.12em;text-transform:uppercase;
+  padding:12px 22px;border-radius:6px;transform:rotate(-2.5deg);
+  background:var(--red-wash);white-space:nowrap;
+}
+.stamp.khong{border-color:var(--green);color:var(--green);background:var(--green-wash)}
+.stamp.warn{border-color:var(--amber);color:var(--amber);background:var(--amber-wash)}
+.stamp-note{flex:1;min-width:240px;font-size:14px}
+
+/* Bảng */
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:#F4F2EA;font-size:12.5px;font-family:var(--mono);font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft)}
+td .cc{display:block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-top:4px}
+.badge{display:inline-block;font-family:var(--mono);font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:3px;letter-spacing:.05em;white-space:nowrap}
+.b-yes{background:var(--red-wash);color:var(--red-deep);border:1px solid #E3B9BA}
+.b-no{background:var(--green-wash);color:var(--green);border:1px solid #BFDCCB}
+.b-warn{background:var(--amber-wash);color:var(--amber);border:1px solid #EBD3A0}
+.b-na{background:#F0EFEA;color:var(--ink-soft);border:1px solid var(--line)}
+.tbl-wrap{overflow-x:auto;border-radius:5px}
+
+/* Mục nhỏ trong bước 5 */
+.item{border-top:1px solid var(--line-soft);padding:13px 0}
+.item:first-child{border-top:none;padding-top:2px}
+.item h4{font-size:14.5px;font-weight:700;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.item p{font-size:14px;margin-top:4px}
+.item .cc{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);display:block;margin-top:3px}
+ul.pos{margin:6px 0 0 20px;font-size:14px}
+ul.pos li{margin-bottom:2px}
+
+.note{background:var(--amber-wash);border:1px solid #EBD3A0;border-left:4px solid var(--amber);border-radius:4px;padding:10px 14px;font-size:13.5px;margin-top:12px}
+.note.blue{background:#EEF3F8;border-color:#C6D6E4;border-left-color:#38617F}
+.nhanxet{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:4px;padding:14px 18px;font-size:14.5px}
+.nhanxet li{margin:0 0 6px 18px}
+.disclaimer{margin-top:26px;font-size:12.5px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:14px}
+.disclaimer b{color:var(--red-deep)}
+
+/* ---------- In phiếu ---------- */
+@media print{
+  body{background:#fff;font-size:12.5px}
+  .no-print{display:none!important}
+  .wrap{max-width:100%;padding:0}
+  .card,.phieu-head{box-shadow:none}
+  #phieu{display:block!important;margin-top:0}
+  .stamp{transform:rotate(-2.5deg)}
+  section.buoc{break-inside:avoid-page}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Công cụ nội bộ · Kỹ sư thẩm duyệt PCCC</div>
+    <h1>Tư vấn sơ bộ PCCC</h1>
+    <p>Nhập quy mô công trình để sàng lọc: diện thẩm định thiết kế PCCC, hệ thống PCCC bắt buộc và phương tiện phải trang bị — kèm căn cứ pháp lý từng kết luận.</p>
+    <div class="legal-tags">
+      <span>NĐ 105/2025/NĐ-CP · PL III</span>
+      <span>QCVN 10:2025/BCA · PL A–G</span>
+      <span>TCVN 7435-1:2004</span>
+      <span>TCVN 13456:2022</span>
+    </div>
+  </header>
+
+  <form id="frm" class="card no-print" novalidate>
+    <fieldset>
+      <legend>I · Thông tin công trình (bắt buộc)</legend>
+      <div class="grid">
+        <div class="field full">
+          <label for="occ">Công năng chính <span class="req">*</span></label>
+          <select id="occ"></select>
+        </div>
+        <div class="field">
+          <label for="floors">Số tầng nổi <span class="req">*</span></label>
+          <input id="floors" type="number" min="1" step="1" inputmode="numeric" placeholder="VD: 5">
+        </div>
+        <div class="field">
+          <label for="basements">Số tầng hầm / bán hầm <span class="hint">Nhập 0 nếu không có</span></label>
+          <input id="basements" type="number" min="0" step="1" inputmode="numeric" value="0">
+        </div>
+        <div class="field">
+          <label for="areaFloor">Diện tích 1 tầng điển hình (m²) <span class="req">*</span></label>
+          <input id="areaFloor" type="number" min="1" inputmode="decimal" placeholder="VD: 800">
+        </div>
+        <div class="field">
+          <label for="totalArea">Tổng diện tích sàn ΣF (m²) <span class="req">*</span></label>
+          <input id="totalArea" type="number" min="1" inputmode="decimal" placeholder="VD: 4000">
+        </div>
+        <div class="field">
+          <label for="volume">Tổng khối tích V (m³) <span class="req">*</span></label>
+          <input id="volume" type="number" min="1" inputmode="decimal" placeholder="VD: 14000">
+        </div>
+        <div class="field">
+          <label for="hFire">Chiều cao PCCC (m) <span class="req">*</span>
+            <span class="hint">Từ mặt đường xe chữa cháy đến sàn tầng trên cùng có người — quyết định sprinkler</span></label>
+          <input id="hFire" type="number" min="0" inputmode="decimal" placeholder="VD: 18.5">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset id="fsExtra" style="display:none">
+      <legend>II · Dữ liệu bổ sung theo công năng</legend>
+      <div class="grid" id="extraGrid"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>III · Bình chữa cháy xách tay</legend>
+      <div class="grid">
+        <div class="field full">
+          <label for="extLevel">Mức nguy hiểm (TCVN 7435-1)
+            <span class="hint">Nếu để "Tự giả thiết", app chọn theo công năng và ghi rõ "(giả thiết)" trong phiếu</span></label>
+          <select id="extLevel">
+            <option value="auto" selected>Tự giả thiết theo công năng</option>
+            <option value="thap">Thấp (VD: văn phòng, lớp học)</option>
+            <option value="tb">Trung bình (VD: cửa hàng, khách sạn, kho nhẹ)</option>
+            <option value="cao">Cao (VD: xưởng SX, kho hàng dễ cháy, gara)</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="form-msg" id="formMsg" role="alert"></div>
+    <div class="actions">
+      <button type="submit" class="btn-main">Lập phiếu tư vấn</button>
+      <button type="button" class="btn-ghost" id="btnReset">Nhập lại</button>
+    </div>
+  </form>
+
+  <div id="phieu" aria-live="polite"></div>
+
+</div>
+<script>
+"use strict";
+/* =====================================================================
+   TƯ VẤN SƠ BỘ PCCC — rule engine
+   Nguồn ngưỡng: NĐ 105/2025 PL III; QCVN 10:2025/BCA PL A–G;
+   TCVN 7435-1:2004; TCVN 13456:2022 (bảng dựng từ bản OCR — ô ⚠️ cần đối chiếu)
+   Trạng thái kết luận: yes = THUỘC DIỆN | no = KHÔNG THUỘC | warn = CẦN ĐỐI CHIẾU ⚠️ | na = KHÔNG NÊU TRONG PHỤ LỤC
+   ===================================================================== */
+
+const fmt = n => Number(n).toLocaleString("vi-VN");
+const R = (v, detail, canCu, notes) => ({ v, detail, canCu, notes: notes || [] });
+
+/* ---------- Danh mục công năng ---------- */
+const OCCS = [
+  { id:"chungcu",  label:"Chung cư / nhà ở tập thể / ký túc xá", binh:"tb" },
+  { id:"nhatre",   label:"Nhà trẻ, mẫu giáo, mầm non", binh:"tb", extra:["kids"] },
+  { id:"truonghoc",label:"Trường học (tiểu học → đại học, dạy nghề)", binh:"thap" },
+  { id:"yte",      label:"Y tế (bệnh viện, phòng khám, điều dưỡng…)", binh:"tb", extra:["pplFloor"] },
+  { id:"khachsan", label:"Khách sạn / nhà nghỉ / cơ sở lưu trú", binh:"tb" },
+  { id:"truso",    label:"Trụ sở / văn phòng làm việc", binh:"thap" },
+  { id:"honhop",   label:"Nhà hỗn hợp (đa công năng)", binh:"tb" },
+  { id:"tttm",     label:"Chợ / trung tâm thương mại / siêu thị", binh:"tb" },
+  { id:"cuahang",  label:"Cửa hàng điện máy / bách hóa / KD hàng dễ cháy", binh:"tb" },
+  { id:"nhahang",  label:"Nhà hàng / cửa hàng ăn uống", binh:"tb" },
+  { id:"karaoke",  label:"Karaoke / vũ trường", binh:"tb", extra:["pplFloor"] },
+  { id:"vanhoa",   label:"Nhà văn hóa / trung tâm hội nghị / nhà đa năng", binh:"tb" },
+  { id:"nhahat",   label:"Nhà hát / rạp chiếu phim / rạp xiếc", binh:"tb", extra:["seats","pplFloor"] },
+  { id:"baotang",  label:"Bảo tàng / triển lãm / thư viện", binh:"tb" },
+  { id:"thethao",  label:"Nhà thi đấu / nhà tập luyện thể thao", binh:"tb", extra:["seats"] },
+  { id:"sanxuat",  label:"Nhà sản xuất (xưởng)", binh:"cao", extra:["hazard","pplFloor"] },
+  { id:"kho",      label:"Nhà kho", binh:"cao", extra:["hazard"] },
+  { id:"garakin",  label:"Nhà để xe (gara) dạng kín", binh:"cao" },
+  { id:"buudien",  label:"Bưu điện / viễn thông", binh:"thap" },
+  { id:"nhaga",    label:"Nhà ga / bến xe / trạm dừng nghỉ", binh:"tb" }
+];
+
+const EXTRA_FIELDS = {
+  kids:    { label:"Số trẻ (cháu)", req:true,  ph:"VD: 120", hint:"Dữ liệu phân nhánh — bắt buộc với nhà trẻ" },
+  seats:   { label:"Số chỗ ngồi / khán đài (chỗ)", req:true, ph:"VD: 350", hint:"Dữ liệu phân nhánh — bắt buộc với nhà hát / thể thao" },
+  hazard:  { label:"Hạng nguy hiểm cháy nổ", req:true, select:[["","— Chọn hạng —"],["A","Hạng A"],["B","Hạng B"],["C","Hạng C"],["D","Hạng D"],["E","Hạng E"]], hint:"Dữ liệu phân nhánh — bắt buộc với nhà SX / kho" },
+  pplFloor:{ label:"Số người lớn nhất trên 1 tầng (người)", req:false, ph:"VD: 60", hint:"Dùng xét loa thông báo (PL G) — bỏ trống nếu chưa rõ" }
+};
+
+/* =====================================================================
+   BƯỚC 1 — Diện thẩm định (Phụ lục III NĐ 105/2025)
+   ===================================================================== */
+function evalThamDinh(d){
+  const F = d.totalArea, T = d.floors, V = d.volume;
+  const cc = m => `Phụ lục III NĐ 105/2025, mục ${m}`;
+  switch(d.occ){
+    case "chungcu":
+      return T>=7||F>=3000 ? R("yes",`Đạt ngưỡng: cao ≥ 7 tầng hoặc ΣF ≥ 3.000 m² (công trình: ${T} tầng, ΣF ${fmt(F)} m²).`,cc(1))
+                           : R("no",`Chưa đạt ngưỡng cao ≥ 7 tầng và ΣF ≥ 3.000 m² (công trình: ${T} tầng, ΣF ${fmt(F)} m²).`,cc(1));
+    case "nhatre":
+      return d.kids>=150||F>=2000 ? R("yes",`Đạt ngưỡng: ≥ 150 cháu hoặc ΣF ≥ 2.000 m² (công trình: ${fmt(d.kids)} cháu, ΣF ${fmt(F)} m²).`,cc(2))
+                                  : R("no",`Chưa đạt ngưỡng ≥ 150 cháu và ΣF ≥ 2.000 m² (công trình: ${fmt(d.kids)} cháu, ΣF ${fmt(F)} m²).`,cc(2));
+    case "truonghoc":
+      return T>=5||F>=3000 ? R("yes",`Đạt ngưỡng: cao ≥ 5 tầng hoặc ΣF ≥ 3.000 m².`,cc(2)) : R("no",`Chưa đạt ngưỡng cao ≥ 5 tầng và ΣF ≥ 3.000 m².`,cc(2));
+    case "yte":
+      return T>=5||F>=2000 ? R("yes",`Đạt ngưỡng: cao ≥ 5 tầng hoặc ΣF ≥ 2.000 m².`,cc(3)) : R("no",`Chưa đạt ngưỡng cao ≥ 5 tầng và ΣF ≥ 2.000 m².`,cc(3));
+    case "thethao":
+      return d.seats>=5000||F>=5000 ? R("yes",`Đạt ngưỡng: khán đài ≥ 5.000 chỗ hoặc ΣF ≥ 5.000 m².`,cc(4)) : R("no",`Chưa đạt ngưỡng khán đài ≥ 5.000 chỗ và ΣF ≥ 5.000 m².`,cc(4));
+    case "nhahat":
+      return d.seats>=300 ? R("yes",`Đạt ngưỡng: ≥ 300 chỗ ngồi (công trình: ${fmt(d.seats)} chỗ).`,cc(5)) : R("no",`Chưa đạt ngưỡng ≥ 300 chỗ ngồi (công trình: ${fmt(d.seats)} chỗ).`,cc(5));
+    case "vanhoa": case "baotang":
+      return T>=5||F>=3000 ? R("yes",`Đạt ngưỡng: cao ≥ 5 tầng hoặc ΣF ≥ 3.000 m².`,cc(5)) : R("no",`Chưa đạt ngưỡng cao ≥ 5 tầng và ΣF ≥ 3.000 m².`,cc(5));
+    case "karaoke":
+      return T>=4||F>=1000 ? R("yes",`Đạt ngưỡng: cao ≥ 4 tầng hoặc ΣF ≥ 1.000 m².`,cc(5)) : R("no",`Chưa đạt ngưỡng cao ≥ 4 tầng và ΣF ≥ 1.000 m².`,cc(5));
+    case "tttm": case "cuahang":
+      return F>=2000 ? R("yes",`Đạt ngưỡng: ΣF ≥ 2.000 m² (công trình: ${fmt(F)} m²).`,cc(6)) : R("no",`Chưa đạt ngưỡng ΣF ≥ 2.000 m² (công trình: ${fmt(F)} m²).`,cc(6));
+    case "nhahang":
+      return F>=3000 ? R("warn",`Đạt ngưỡng ΣF ≥ 3.000 m² — nhưng ngưỡng này là ô ⚠️ (OCR), phải đối chiếu bản gốc trước khi kết luận cứng.`,cc(6),["Ngưỡng nhà hàng/cửa hàng ăn uống đang chờ đối chiếu bản gốc NĐ 105."])
+                     : R("warn",`Chưa đạt ngưỡng ΣF ≥ 3.000 m² theo bảng dựng từ OCR — ngưỡng là ô ⚠️, cần đối chiếu bản gốc để khẳng định.`,cc(6),["Ngưỡng nhà hàng/cửa hàng ăn uống đang chờ đối chiếu bản gốc NĐ 105."]);
+    case "khachsan": case "buudien": case "truso":
+      return T>=7||F>=3000 ? R("yes",`Đạt ngưỡng: cao ≥ 7 tầng hoặc ΣF ≥ 3.000 m².`,cc(7)) : R("no",`Chưa đạt ngưỡng cao ≥ 7 tầng và ΣF ≥ 3.000 m².`,cc(7));
+    case "honhop":
+      return T>=7||F>=3000 ? R("yes",`Đạt ngưỡng: cao ≥ 7 tầng hoặc ΣF ≥ 3.000 m².`,cc(8),["Nhà hỗn hợp: nếu có phần công năng thuộc mục 1–7 PL III thì cũng thuộc diện — cần kỹ sư xét riêng từng phần công năng."])
+                           : R("warn",`Chưa đạt ngưỡng cao ≥ 7 tầng / ΣF ≥ 3.000 m² xét theo tổng thể — NHƯNG nếu có phần công năng thuộc mục 1–7 PL III thì vẫn thuộc diện. Cần kỹ sư xét riêng từng phần công năng.`,cc(8));
+    case "sanxuat":
+      if(d.hazard==="A"||d.hazard==="B")
+        return V>=7000||F>=1000 ? R("warn",`Hạng ${d.hazard}: đạt ngưỡng V ≥ 7.000 m³ hoặc ΣF ≥ 1.000 m² theo bảng dựng từ OCR (ô ⚠️ mục 9d) — đối chiếu bản gốc trước khi dùng chính thức.`,cc("9d"))
+                                : R("warn",`Hạng ${d.hazard}: chưa đạt ngưỡng V ≥ 7.000 m³ / ΣF ≥ 1.000 m² theo bảng dựng từ OCR (ô ⚠️ mục 9d) — đối chiếu bản gốc.`,cc("9d"));
+      if(d.hazard==="C")
+        return R("warn",`Hạng C: ngưỡng mục 9d bị mất khi OCR — KHÔNG kết luận được, bắt buộc đối chiếu bản gốc NĐ 105.`,cc("9d"));
+      return R("na",`Hạng ${d.hazard}: mục 9d PL III chỉ nêu hạng A, B (và hạng C — ô ⚠️). Không nêu ngưỡng cho hạng ${d.hazard}; đối chiếu bản gốc toàn mục 9 để khẳng định.`,cc(9));
+    case "kho":
+      if(["A","B","C"].includes(d.hazard))
+        return V>=5000||F>=2000 ? R("warn",`Kho hạng ${d.hazard}: đạt ngưỡng V ≥ 5.000 m³ hoặc ΣF ≥ 2.000 m² theo bảng dựng từ OCR (ô ⚠️ mục 10) — đối chiếu bản gốc trước khi dùng chính thức.`,cc(10))
+                                : R("warn",`Kho hạng ${d.hazard}: chưa đạt ngưỡng V ≥ 5.000 m³ / ΣF ≥ 2.000 m² theo bảng dựng từ OCR (ô ⚠️ mục 10) — đối chiếu bản gốc.`,cc(10));
+      return R("no",`Kho hạng ${d.hazard}: mục 10 PL III chỉ áp dụng kho hạng A, B, C.`,cc(10));
+    case "garakin":
+      return F>=2000 ? R("yes",`Đạt ngưỡng: ΣF ≥ 2.000 m².`,cc(12)) : R("no",`Chưa đạt ngưỡng ΣF ≥ 2.000 m².`,cc(12));
+    case "nhaga":
+      return F>=3000 ? R("yes",`Đạt ngưỡng: ΣF ≥ 3.000 m² (một số loại xét theo cấp công trình — kiểm tra thêm).`,cc(13)) : R("no",`Chưa đạt ngưỡng ΣF ≥ 3.000 m² (một số loại xét theo cấp công trình — kiểm tra thêm).`,cc(13));
+  }
+  return R("na","Không xác định được nhóm công năng.","—");
+}
+
+/* =====================================================================
+   BƯỚC 2 — Hệ thống bắt buộc theo QCVN 10:2025/BCA
+   ===================================================================== */
+function evalBaoChay(d){
+  const F=d.totalArea,T=d.floors,H=d.hFire,B=d.basements>0;
+  const cc = s => `QCVN 10:2025/BCA, Bảng A.1, STT ${s}`;
+  switch(d.occ){
+    case "chungcu": return T>=5||F>=700 ? R("yes","Đạt ngưỡng: cao ≥ 5 tầng hoặc ΣF ≥ 700 m².",cc(3),[T<5&&F<1500?"Cho phép dùng thiết bị báo cháy độc lập khi < 5 tầng và < 1.500 m².":""].filter(Boolean)) : R("no","Chưa đạt ngưỡng cao ≥ 5 tầng và ΣF ≥ 700 m².",cc(3));
+    case "nhatre":  return d.kids>=100||F>=300 ? R("yes","Đạt ngưỡng: ≥ 100 cháu hoặc ΣF ≥ 300 m².",cc(4),[F<500?"Cho phép thiết bị báo cháy độc lập khi ΣF < 500 m².":""].filter(Boolean)) : R("no","Chưa đạt ngưỡng ≥ 100 cháu và ΣF ≥ 300 m².",cc(4));
+    case "truonghoc": return T>=5||F>=1500 ? R("yes","Đạt ngưỡng: cao ≥ 5 tầng hoặc ΣF ≥ 1.500 m².",cc(5)) : R("no","Chưa đạt ngưỡng cao ≥ 5 tầng và ΣF ≥ 1.500 m².",cc(5));
+    case "yte":     return T>=3||F>=300 ? R("yes","Đạt ngưỡng: cao ≥ 3 tầng hoặc ΣF ≥ 300 m².",cc(6)) : R("no","Chưa đạt ngưỡng cao ≥ 3 tầng và ΣF ≥ 300 m².",cc(6));
+    case "thethao": return F>=500||d.seats>=200 ? R("yes","Đạt ngưỡng: ΣF ≥ 500 m² hoặc khán đài ≥ 200 chỗ.",cc(8)) : R("no","Chưa đạt ngưỡng ΣF ≥ 500 m² và khán đài ≥ 200 chỗ.",cc(8));
+    case "nhahat":  return F>=500 ? R("yes","Đạt ngưỡng: ΣF ≥ 500 m².",cc(9)) : R("no","Chưa đạt ngưỡng ΣF ≥ 500 m².",cc(9));
+    case "baotang":
+      if(B) return R("yes","Có tầng hầm/bán hầm: bắt buộc, không phụ thuộc diện tích.",cc("11.1"));
+      return T>=3 ? R("yes","Trên mặt đất ≥ 3 tầng: bắt buộc, không phụ thuộc diện tích.",cc("11.2.2"))
+                  : (F>=500 ? R("yes","1–2 tầng: đạt ngưỡng ΣF ≥ 500 m².",cc("11.2.1")) : R("no","1–2 tầng: chưa đạt ngưỡng ΣF ≥ 500 m².",cc("11.2.1")));
+    case "vanhoa":  return T>=5||F>=500 ? R("yes","Đạt ngưỡng: cao ≥ 5 tầng hoặc ΣF ≥ 500 m².",cc(12)) : R("no","Chưa đạt ngưỡng cao ≥ 5 tầng và ΣF ≥ 500 m².",cc(12));
+    case "karaoke": return R("yes","Bắt buộc, không phụ thuộc diện tích (mọi trường hợp karaoke/vũ trường).",cc(13));
+    case "tttm":    return R("yes","Bắt buộc, không phụ thuộc diện tích.",cc(15));
+    case "nhahang": return F>=500 ? R("yes","Đạt ngưỡng: ΣF ≥ 500 m².",cc(16),[T<3&&F<1500?"Cho phép thiết bị báo cháy độc lập khi < 3 tầng và < 1.500 m².":""].filter(Boolean)) : R("no","Chưa đạt ngưỡng ΣF ≥ 500 m².",cc(16));
+    case "cuahang":
+      if(B) return R("yes","Có tầng hầm/bán hầm: bắt buộc, không phụ thuộc diện tích.",cc("17.1"));
+      return T>=3||F>=300 ? R("yes","Trên mặt đất: đạt ngưỡng cao ≥ 3 tầng hoặc ΣF ≥ 300 m².",cc("17.2"),["Nhà KD chất lỏng cháy/dễ cháy (trừ can, bình ≤ 20 lít): bắt buộc không phụ thuộc diện tích (STT 17.3)."]) : R("no","Chưa đạt ngưỡng cao ≥ 3 tầng và ΣF ≥ 300 m².",cc("17.2"),["Nhà KD chất lỏng cháy/dễ cháy (trừ can, bình ≤ 20 lít): bắt buộc không phụ thuộc diện tích (STT 17.3)."]);
+    case "khachsan":return T>=3||F>=700 ? R("yes","Đạt ngưỡng: cao ≥ 3 tầng hoặc ΣF ≥ 700 m².",cc(18),[T<5&&F<1500?"Cho phép thiết bị báo cháy độc lập khi < 5 tầng và < 1.500 m².":""].filter(Boolean)) : R("no","Chưa đạt ngưỡng cao ≥ 3 tầng và ΣF ≥ 700 m².",cc(18));
+    case "buudien": return T>=3||F>=500 ? R("yes","Đạt ngưỡng: cao ≥ 3 tầng hoặc ΣF ≥ 500 m².",cc(19)) : R("no","Chưa đạt ngưỡng cao ≥ 3 tầng và ΣF ≥ 500 m².",cc(19));
+    case "truso":   return T>=5||F>=500 ? R("yes","Đạt ngưỡng: cao ≥ 5 tầng hoặc ΣF ≥ 500 m².",cc(20),[T<5&&F<1500?"Cho phép thiết bị báo cháy độc lập khi < 5 tầng và < 1.500 m².":""].filter(Boolean)) : R("no","Chưa đạt ngưỡng cao ≥ 5 tầng và ΣF ≥ 500 m².",cc(20));
+    case "honhop":  return T>=3||F>=500 ? R("yes","Đạt ngưỡng: cao ≥ 3 tầng hoặc ΣF ≥ 500 m².",cc(21)) : R("no","Chưa đạt ngưỡng cao ≥ 3 tầng và ΣF ≥ 500 m².",cc(21));
+    case "nhaga":   return F>=500 ? R("yes","Đạt ngưỡng: ΣF ≥ 500 m².",cc(22)) : R("no","Chưa đạt ngưỡng ΣF ≥ 500 m².",cc(22));
+    case "garakin":
+      if(B||T>=2) return R("yes","Dạng kín có tầng hầm/bán hầm hoặc ≥ 2 tầng: bắt buộc, không phụ thuộc diện tích.",cc("25.1"));
+      return R("warn","Dạng kín 1 tầng nổi: ngưỡng phụ thuộc bậc chịu lửa & cấp kết cấu S — nhiều ô ⚠️ OCR (STT 25.2), bắt buộc đối chiếu bản gốc.",cc("25.2"));
+    case "sanxuat": case "kho":
+      return R("warn","Bảng A.1 áp dụng cho NHÀ dân dụng; nhà SX/kho xét theo Bảng A.2/A.3 (khu vực, gian phòng) — bảng này chưa chuẩn hóa trong công cụ, cần kỹ sư đối chiếu bản gốc QCVN 10.",`QCVN 10:2025/BCA, Bảng A.2/A.3`);
+  }
+  return R("na","—","—");
+}
+
+function evalSprinkler(d){
+  const F=d.totalArea,T=d.floors,H=d.hFire,B=d.basements>0;
+  const cc = s => `QCVN 10:2025/BCA, Bảng A.1, STT ${s}`;
+  const hf = th => `chiều cao PCCC ${H} m so ngưỡng ≥ ${th} m`;
+  switch(d.occ){
+    case "chungcu": return H>=30 ? R("yes",`Đạt ngưỡng: ${hf(30)}.`,cc(3)) : R("no",`Chưa đạt ngưỡng chiều cao PCCC ≥ 30 m (công trình: ${H} m).`,cc(3));
+    case "nhatre":  return (T>=4&&F>=5000) ? R("yes","Đạt ngưỡng: cao ≥ 4 tầng VÀ ΣF ≥ 5.000 m² (điều kiện đồng thời).",cc(4)) : R("no","Chưa đạt điều kiện đồng thời cao ≥ 4 tầng VÀ ΣF ≥ 5.000 m².",cc(4));
+    case "truonghoc": return H>=25 ? R("yes",`Đạt ngưỡng: ${hf(25)}.`,cc(5)) : R("no",`Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m (công trình: ${H} m).`,cc(5));
+    case "yte":     return H>=25||F>=2000 ? R("yes","Đạt ngưỡng: chiều cao PCCC ≥ 25 m hoặc ΣF ≥ 2.000 m².",cc(6)) : R("no","Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m và ΣF ≥ 2.000 m².",cc(6));
+    case "thethao": return H>=25 ? R("yes",`Đạt ngưỡng: ${hf(25)}.`,cc(8)) : R("no",`Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m.`,cc(8));
+    case "nhahat":  return H>=25 ? R("yes",`Đạt ngưỡng: ${hf(25)}.`,cc(9)) : R("no",`Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m.`,cc(9));
+    case "baotang":
+      if(B) return F>=200 ? R("yes","Tầng hầm/bán hầm: đạt ngưỡng ΣF ≥ 200 m².",cc("11.1")) : R("no","Tầng hầm/bán hầm: chưa đạt ngưỡng ΣF ≥ 200 m².",cc("11.1"));
+      return T>=3 ? (F>=500 ? R("yes","≥ 3 tầng: đạt ngưỡng ΣF ≥ 500 m².",cc("11.2.2")) : R("no","≥ 3 tầng: chưa đạt ngưỡng ΣF ≥ 500 m².",cc("11.2.2")))
+                  : (F>=4000 ? R("yes","1–2 tầng: đạt ngưỡng ΣF ≥ 4.000 m².",cc("11.2.1")) : R("no","1–2 tầng: chưa đạt ngưỡng ΣF ≥ 4.000 m².",cc("11.2.1")));
+    case "vanhoa":  return H>=25||F>=5000 ? R("yes","Đạt ngưỡng: chiều cao PCCC ≥ 25 m hoặc ΣF ≥ 5.000 m².",cc(12)) : R("no","Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m và ΣF ≥ 5.000 m².",cc(12));
+    case "karaoke":
+      if(B) return R("yes","Có tầng hầm/bán hầm: bắt buộc, không phụ thuộc diện tích.",cc("13.1"));
+      return T>=3 ? R("yes","Trên mặt đất ≥ 3 tầng: bắt buộc, không phụ thuộc diện tích.",cc("13.2.2"))
+                  : (F>=500 ? R("yes","1–2 tầng: đạt ngưỡng ΣF ≥ 500 m².",cc("13.2.1")) : R("no","1–2 tầng: chưa đạt ngưỡng ΣF ≥ 500 m².",cc("13.2.1")));
+    case "tttm":
+      if(B) return F>=200 ? R("yes","Tầng hầm/bán hầm: đạt ngưỡng ΣF ≥ 200 m².",cc("15.1")) : R("no","Tầng hầm/bán hầm: chưa đạt ngưỡng ΣF ≥ 200 m².",cc("15.1"));
+      return T>=3 ? R("yes","Trên mặt đất ≥ 3 tầng: bắt buộc, không phụ thuộc diện tích.",cc("15.2.2"))
+                  : (F>=3500 ? R("yes","1–2 tầng: đạt ngưỡng ΣF ≥ 3.500 m².",cc("15.2.1")) : R("no","1–2 tầng: chưa đạt ngưỡng ΣF ≥ 3.500 m².",cc("15.2.1")));
+    case "nhahang": return H>=25||F>=5000 ? R("yes","Đạt ngưỡng: chiều cao PCCC ≥ 25 m hoặc ΣF ≥ 5.000 m².",cc(16)) : R("no","Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m và ΣF ≥ 5.000 m².",cc(16));
+    case "cuahang":
+      if(B) return F>=200 ? R("yes","Tầng hầm/bán hầm: đạt ngưỡng ΣF ≥ 200 m².",cc("17.1")) : R("no","Tầng hầm/bán hầm: chưa đạt ngưỡng ΣF ≥ 200 m².",cc("17.1"));
+      return H>=25||F>=3500 ? R("yes","Đạt ngưỡng: chiều cao PCCC ≥ 25 m hoặc ΣF ≥ 3.500 m².",cc("17.2"),["Nhà KD chất lỏng cháy/dễ cháy (trừ can, bình ≤ 20 lít): bắt buộc không phụ thuộc diện tích (STT 17.3)."]) : R("no","Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m và ΣF ≥ 3.500 m².",cc("17.2"),["Nhà KD chất lỏng cháy/dễ cháy (trừ can, bình ≤ 20 lít): bắt buộc không phụ thuộc diện tích (STT 17.3)."]);
+    case "khachsan":return H>=25||F>=5000 ? R("yes","Đạt ngưỡng: chiều cao PCCC ≥ 25 m hoặc ΣF ≥ 5.000 m².",cc(18)) : R("no","Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m và ΣF ≥ 5.000 m².",cc(18));
+    case "buudien": return H>=25||F>=5000 ? R("yes","Đạt ngưỡng: chiều cao PCCC ≥ 25 m hoặc ΣF ≥ 5.000 m².",cc(19)) : R("no","Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m và ΣF ≥ 5.000 m².",cc(19));
+    case "truso":   return H>=25||F>=5000 ? R("yes","Đạt ngưỡng: chiều cao PCCC ≥ 25 m hoặc ΣF ≥ 5.000 m².",cc(20)) : R("no","Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m và ΣF ≥ 5.000 m².",cc(20));
+    case "honhop":  return H>=25||F>=5000 ? R("yes","Đạt ngưỡng: chiều cao PCCC ≥ 25 m hoặc ΣF ≥ 5.000 m².",cc(21)) : R("no","Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m và ΣF ≥ 5.000 m².",cc(21));
+    case "nhaga":   return H>=25||F>=10000 ? R("yes","Đạt ngưỡng: chiều cao PCCC ≥ 25 m hoặc ΣF ≥ 10.000 m².",cc(22)) : R("no","Chưa đạt ngưỡng chiều cao PCCC ≥ 25 m và ΣF ≥ 10.000 m².",cc(22));
+    case "garakin":
+      if(B||T>=2) return R("yes","Dạng kín có tầng hầm/bán hầm hoặc ≥ 2 tầng: bắt buộc, không phụ thuộc diện tích.",cc("25.1"));
+      return R("warn","Dạng kín 1 tầng nổi: ngưỡng theo bậc chịu lửa & cấp S — nhiều ô ⚠️ OCR (STT 25.2), bắt buộc đối chiếu bản gốc.",cc("25.2"));
+    case "sanxuat": case "kho":
+      return R("warn","Nhà SX/kho xét chữa cháy tự động theo Bảng A.2/A.3 (khu vực, gian phòng, hạng nguy hiểm) — chưa chuẩn hóa trong công cụ, cần kỹ sư đối chiếu bản gốc QCVN 10.",`QCVN 10:2025/BCA, Bảng A.2/A.3`);
+  }
+  return R("na","—","—");
+}
+
+function evalHongNuoc(d){
+  const F=d.totalArea,T=d.floors,B=d.basements>0;
+  const cc = "QCVN 10:2025/BCA, Phụ lục B";
+  switch(d.occ){
+    case "chungcu": return T>=7 ? R("yes","Đạt ngưỡng: nhà ở/công trình công cộng cao ≥ 7 tầng.",cc) : R("no","Chưa đạt ngưỡng cao ≥ 7 tầng (nhóm nhà ở, công trình công cộng chung).",cc);
+    case "honhop": case "khachsan":
+      return T>=5||F>=1500 ? R("yes","Đạt ngưỡng: cao ≥ 5 tầng hoặc ΣF ≥ 1.500 m².",cc) : R("no","Chưa đạt ngưỡng cao ≥ 5 tầng và ΣF ≥ 1.500 m².",cc);
+    case "nhatre":  return d.kids>=100||T>=3||F>=1000 ? R("yes","Đạt ngưỡng: ≥ 100 cháu hoặc cao ≥ 3 tầng hoặc ΣF ≥ 1.000 m².",cc) : R("no","Chưa đạt ngưỡng ≥ 100 cháu, cao ≥ 3 tầng và ΣF ≥ 1.000 m².",cc);
+    case "truonghoc": case "yte":
+      return T>=3||F>=600 ? R("yes","Đạt ngưỡng: cao ≥ 3 tầng hoặc ΣF ≥ 600 m².",cc) : R("no","Chưa đạt ngưỡng cao ≥ 3 tầng và ΣF ≥ 600 m².",cc);
+    case "thethao": return T>=6||F>=1500 ? R("yes","Đạt ngưỡng: cao ≥ 6 tầng hoặc ΣF ≥ 1.500 m² (nhóm văn hóa/thể thao).",cc) : R("no","Chưa đạt ngưỡng cao ≥ 6 tầng và ΣF ≥ 1.500 m².",cc);
+    case "nhahat":  return d.seats>=300||F>=1000 ? R("yes","Đạt ngưỡng: ≥ 300 chỗ ngồi hoặc ΣF ≥ 1.000 m².",cc) : R("no","Chưa đạt ngưỡng ≥ 300 chỗ và ΣF ≥ 1.000 m².",cc);
+    case "vanhoa": case "baotang": case "cuahang":
+      return F>=1500 ? R("yes","Đạt ngưỡng: ΣF ≥ 1.500 m² (nhóm thư viện/nhà văn hóa/TT hội nghị/cửa hàng).",cc) : R("no","Chưa đạt ngưỡng ΣF ≥ 1.500 m².",cc);
+    case "truso": case "buudien":
+      return T>=6||F>=1500 ? R("yes","Đạt ngưỡng: cao ≥ 6 tầng hoặc ΣF ≥ 1.500 m².",cc) : R("no","Chưa đạt ngưỡng cao ≥ 6 tầng và ΣF ≥ 1.500 m².",cc);
+    case "karaoke":
+      if(B) return R("yes","Có tầng hầm/bán hầm: bắt buộc, không phụ thuộc diện tích.",cc);
+      return T>=3 ? R("yes","Trên mặt đất ≥ 3 tầng: bắt buộc, không phụ thuộc diện tích.",cc)
+                  : (F>=300 ? R("yes","1–2 tầng: đạt ngưỡng ΣF ≥ 300 m².",cc) : R("no","1–2 tầng: chưa đạt ngưỡng ΣF ≥ 300 m².",cc));
+    case "tttm":    return R("yes","Chợ hạng 1, hạng 2, TTTM, siêu thị: bắt buộc, không phụ thuộc diện tích.",cc);
+    case "nhahang": return T>=6||F>=1500 ? R("yes","Đạt ngưỡng: cao ≥ 6 tầng hoặc ΣF ≥ 1.500 m².",cc) : R("no","Chưa đạt ngưỡng cao ≥ 6 tầng và ΣF ≥ 1.500 m².",cc);
+    case "nhaga":   return F>=1500 ? R("yes","Đạt ngưỡng: ΣF ≥ 1.500 m².",cc) : R("no","Chưa đạt ngưỡng ΣF ≥ 1.500 m².",cc);
+    case "sanxuat": case "kho": case "garakin":
+      return R("na","Loại nhà không nêu trong Phụ lục B QCVN 10 — họng nước trong nhà cho nhà SX/kho/gara xét theo QCVN 06:2022/BXD (Bảng 12) căn cứ khối tích và hạng nguy hiểm; cần kỹ sư đối chiếu riêng.",cc);
+  }
+  return R("na","—",cc);
+}
+
+function evalNgoaiNha(d){
+  const F=d.totalArea,T=d.floors;
+  const cc = "QCVN 10:2025/BCA, Phụ lục C";
+  switch(d.occ){
+    case "yte":  return T>=5||F>=3000 ? R("yes","Nhà khám, chữa bệnh: đạt ngưỡng cao ≥ 5 tầng hoặc ΣF ≥ 3.000 m² (TT 1).",cc) : R("no","Chưa đạt ngưỡng cao ≥ 5 tầng và ΣF ≥ 3.000 m² (TT 1).",cc);
+    case "tttm": return R("yes","Chợ hạng 1, hạng 2, TTTM: bắt buộc, không phụ thuộc quy mô (TT 2).",cc);
+    case "nhaga":return R("yes","Nhà ga/cảng/bến: bắt buộc, không phụ thuộc quy mô (TT 3). Lưu ý: trạm dừng nghỉ chỉ áp dụng trên đường cao tốc.",cc);
+    default:
+      return R("na","Loại nhà không nêu trực tiếp trong Phụ lục C. Lưu ý: nếu công trình nằm trong khu đô thị, khu nhà ở, KCN/cụm CN, khu du lịch… thì hạ tầng khu vực thuộc diện cấp nước ngoài nhà (TT 10) — thường do hạ tầng chung đảm nhận; nhu cầu nước ngoài nhà của bản thân công trình xét theo QCVN 06.",cc);
+  }
+}
+
+/* =====================================================================
+   BƯỚC 5 — Phương tiện & hạng mục khác
+   ===================================================================== */
+const PHADO_LIST = ["sanxuat","kho","chungcu","khachsan","truso","truonghoc","yte","nhaga","karaoke","nhahat","tttm"];
+function evalPhaDo(d){
+  const cc = "QCVN 10:2025/BCA, Phụ lục E";
+  if(PHADO_LIST.includes(d.occ))
+    return R("warn","Loại nhà nằm trong danh mục phải trang bị dụng cụ phá dỡ thô sơ. Định mức: 01 bộ (rìu ≥ 2 kg; xà beng ≥ 100 cm; búa ≥ 5 kg; kìm cộng lực tải cắt ≥ 60 kg). Cột quy mô bị gộp khi OCR (⚠️ mặc định \"không phụ thuộc quy mô\") — đối chiếu bản gốc để xác nhận ngưỡng.",cc);
+  return R("na","Loại nhà không nêu trong danh mục Phụ lục E (danh mục OCR ⚠️ — đối chiếu bản gốc nếu nghi ngờ).",cc);
+}
+
+function evalMatNa(d){
+  const cc = "QCVN 10:2025/BCA, Phụ lục F";
+  if(d.occ==="khachsan")
+    return d.floors>=3 ? R("yes","Khách sạn/nhà nghỉ/lưu trú cao ≥ 3 tầng: trang bị mặt nạ LỌC ĐỘC tại mọi tầng, định mức 01 chiếc/người (gồm khách lưu trú + nhân viên thường xuyên) (TT 1).",cc)
+                       : R("no","Khách sạn/lưu trú dưới 3 tầng: chưa thuộc diện theo TT 1.",cc);
+  if(d.occ==="karaoke")
+    return R("yes","Karaoke/vũ trường: bắt buộc không phụ thuộc quy mô — mặt nạ LỌC ĐỘC mọi tầng, tính theo số người trong phòng lớn nhất của tầng, 01 chiếc/người (TT 2).",cc);
+  return R("na","Loại nhà không nêu trong Phụ lục F (các mục còn lại áp dụng công nghiệp/năng lượng quy mô lớn: lọc hóa dầu, kho dầu ≥ 100.000 m³, nhiệt điện ≥ 600 MW, KCN ≥ 75 ha…).",cc);
+}
+
+function evalLoa(d){
+  const cc = "QCVN 10:2025/BCA, Phụ lục G";
+  const notes = ["TT 1 Phụ lục G (nhà thuộc diện quản lý PCCC có điều kiện tầng hầm) bị hỏng khi OCR ⚠️ — đối chiếu bản gốc, đặc biệt khi công trình có tầng hầm."];
+  const P = d.pplFloor;
+  if(["karaoke","nhahat","yte"].includes(d.occ)){
+    if(P===null) return R("warn","Thuộc nhóm karaoke/vũ trường, nhà hát/rạp, bệnh viện: ngưỡng ≥ 50 người trên 1 tầng (TT 2). Chưa có số người/tầng — cần xác nhận để kết luận.",cc,notes);
+    return P>=50 ? R("yes",`Đạt ngưỡng: ≥ 50 người trên 1 tầng (khai báo: ${fmt(P)} người) (TT 2).`,cc,notes)
+                 : R("no",`Chưa đạt ngưỡng ≥ 50 người trên 1 tầng (khai báo: ${fmt(P)} người) (TT 2).`,cc,notes);
+  }
+  if(d.occ==="garakin")
+    return d.totalArea>=18000 ? R("warn","Đạt ngưỡng ΣF ≥ 18.000 m² theo bảng dựng từ OCR (TT 3 — ô ⚠️), đối chiếu bản gốc trước khi kết luận cứng.",cc,notes)
+                              : R("warn","Chưa đạt ngưỡng ΣF ≥ 18.000 m² (TT 3 — ngưỡng là ô ⚠️ OCR, đối chiếu bản gốc).",cc,notes);
+  if(d.occ==="sanxuat"){
+    if(P===null) return R("warn","Nhà sản xuất: ngưỡng ΣF ≥ 18.000 m² VÀ ≥ 300 người trên 1 tầng (TT 4 — điều kiện đồng thời). Chưa có số người/tầng — cần xác nhận.",cc,notes);
+    return (d.totalArea>=18000&&P>=300) ? R("yes","Đạt điều kiện đồng thời ΣF ≥ 18.000 m² VÀ ≥ 300 người/tầng (TT 4).",cc,notes)
+                                        : R("no","Chưa đạt điều kiện đồng thời ΣF ≥ 18.000 m² VÀ ≥ 300 người/tầng (TT 4).",cc,notes);
+  }
+  if(d.occ==="nhaga") return R("yes","Nhà ga hành khách: bắt buộc, không phụ thuộc quy mô (TT 6).",cc,notes);
+  return R("na","Loại nhà không nêu trực tiếp trong Phụ lục G.",cc,notes);
+}
+
+function evalCoGioi(d){
+  const cc = "QCVN 10:2025/BCA, Phụ lục D";
+  if(["sanxuat","kho"].includes(d.occ))
+    return R("na","Phụ lục D áp dụng chủ yếu cho kho dầu mỏ, cảng, nhà máy điện, lọc hóa dầu, KCN/cụm CN. Nhà SX/kho đơn lẻ thường không thuộc diện; nếu nằm trong KCN/cụm CN thì phương tiện cơ giới xét theo hạ tầng KCN (định mức ⚠️ — đọc bản gốc khi rơi vào diện).",cc);
+  return R("na","Công trình dân dụng thông thường không thuộc diện trang bị phương tiện chữa cháy cơ giới (Phụ lục D áp dụng công nghiệp/hạ tầng quy mô lớn).",cc);
+}
+
+const BINH_TBL = { thap:{cs:"2-A",kc:20,dt:300,ten:"Thấp"}, tb:{cs:"3-A",kc:20,dt:150,ten:"Trung bình"}, cao:{cs:"4-A",kc:15,dt:100,ten:"Cao"} };
+function evalBinh(d){
+  const auto = d.extLevel==="auto";
+  const lv = auto ? (OCCS.find(o=>o.id===d.occ).binh) : d.extLevel;
+  const t = BINH_TBL[lv];
+  const n1 = Math.ceil(d.areaFloor/t.dt);
+  const min = d.areaFloor<100 ? 1 : 2;
+  const n = Math.max(n1,min);
+  return {
+    v:"yes",
+    lv, ten:t.ten + (auto?" (giả thiết theo công năng — cần xác nhận)":""),
+    detail:`Tầng điển hình ${fmt(d.areaFloor)} m², mức nguy hiểm ${t.ten}${auto?" (giả thiết)":""}: dự kiến ≥ ${n} bình/tầng loại A, công suất tối thiểu ${t.cs}, khoảng cách di chuyển ≤ ${t.kc} m, diện tích bảo vệ tối đa ${fmt(t.dt)} m²/bình. Sàn tối thiểu: ${min} bình/tầng.`,
+    canCu:"TCVN 7435-1:2004, Bảng 1, mục 7.2.2 / 7.1.8",
+    notes:[
+      "Số bình là DỰ KIẾN theo diện tích; bố trí thực tế theo mặt bằng để đảm bảo khoảng cách di chuyển — mặt bằng dài/ngóc ngách có thể cần nhiều hơn.",
+      "Nếu có mối nguy hiểm loại B/C (chất lỏng cháy, khí): bổ sung bình theo Bảng 2 (55B/144B/233B, KC ≤ 15 m); vẫn phải đủ bình loại A (mục 7.1.6).",
+      "Bố trí: dễ thấy, dễ lấy, trên lối đi/lối ra; bình ≤ 18 kg đặt đỉnh ≤ 1,5 m; > 18 kg ≤ 1,0 m; đáy cách sàn ≥ 3 cm (điều 5).",
+      "TCVN 7435-1 là bản 2004 — kiểm tra bản thay thế mới hơn nếu có."
+    ]
+  };
+}
+
+function evalDen(d){
+  const pos = [
+    "Cầu thang bộ thoát nạn",
+    "Đường thoát nạn, vị trí chuyển hướng, nút giao hành lang",
+    "Vị trí thay đổi cao độ",
+    "Cửa / lối ra thoát nạn",
+    "Phòng trạm biến áp, máy phát, kỹ thuật thang máy, gian lánh nạn (nếu có)",
+    "Phòng trực điều khiển chống cháy, phòng bơm chữa cháy, vị trí đặt phương tiện PCCC",
+    "Gian phòng có người làm việc mà điểm xa nhất → lối ra > 13 m"
+  ];
+  if(d.occ==="garakin"||d.basements>0) pos.splice(4,0,"Gara / tầng hầm để xe");
+  const notes = [
+    "Nguồn dự phòng duy trì ≥ 120 phút (mục 4.5); độ rọi đường thoát nạn ≥ 1 lux tại tim đường, gian phòng ≥ 0,5 lux (5.1.2–5.1.3).",
+    "Biển báo \"LỐI RA/EXIT\" nền xanh lá chữ trắng; khoảng cách giữa các biển ≤ 25 m (5.2.6); biển chỉ hướng tại vị trí tầm nhìn che khuất.",
+    "Số lượng đèn/biển chính xác phụ thuộc mặt bằng bố trí — cần bản vẽ để định vị."
+  ];
+  if(d.occ==="khachsan"&&d.floors>=7) notes.unshift("Khách sạn ≥ 7 tầng: bổ sung BIỂN TẦM THẤP tại tầng có phòng nghỉ (đáy biển 150–200 mm so sàn, khoảng cách ≤ 10 m) (5.2.3) và sơ đồ thoát nạn tại mọi phòng nghỉ (5.2.9).");
+  else if(d.occ==="khachsan") notes.unshift("Cơ sở lưu trú: sơ đồ thoát nạn tại mọi phòng nghỉ (5.2.9).");
+  if(d.volume>=5000) notes.push("Khối tích ≥ 5.000 m³: nếu có hành lang thoát nạn > 10 m thì thuộc diện biển tầm thấp (5.2.3) — cần xác nhận chiều dài hành lang.");
+  if(d.areaFloor>1000) notes.push(`Tầng > 1.000 m² (tầng điển hình ${fmt(d.areaFloor)} m²): bắt buộc SƠ ĐỒ CHỈ DẪN THOÁT NẠN tại tầng, kích thước ≥ 600×400 mm, mép dưới cao 1,5 ± 0,2 m (5.2.9).`);
+  else notes.push("Tầng có ≥ 2 lối ra thoát nạn: bắt buộc sơ đồ chỉ dẫn thoát nạn tại tầng (5.2.9) — xác nhận theo mặt bằng.");
+  return { v:"yes", pos, notes, canCu:"TCVN 13456:2022, mục 4.5, 5.1.1–5.1.6, 5.2" };
+}
+
+/* =====================================================================
+   FORM — dựng select, trường bổ sung, kiểm tra đầu vào (BƯỚC 0)
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+const occSel = $("occ");
+occSel.innerHTML = '<option value="">— Chọn công năng —</option>' + OCCS.map(o=>`<option value="${o.id}">${o.label}</option>`).join("");
+
+occSel.addEventListener("change", () => {
+  const occ = OCCS.find(o=>o.id===occSel.value);
+  const fs = $("fsExtra"), grid = $("extraGrid");
+  grid.innerHTML = "";
+  if(occ && occ.extra && occ.extra.length){
+    occ.extra.forEach(k=>{
+      const f = EXTRA_FIELDS[k];
+      const wrap = document.createElement("div");
+      wrap.className = "field";
+      const req = f.req ? ' <span class="req">*</span>' : "";
+      let ctrl;
+      if(f.select){
+        ctrl = `<select id="x_${k}">${f.select.map(([v,l])=>`<option value="${v}">${l}</option>`).join("")}</select>`;
+      } else {
+        ctrl = `<input id="x_${k}" type="number" min="0" inputmode="numeric" placeholder="${f.ph||""}">`;
+      }
+      wrap.innerHTML = `<label for="x_${k}">${f.label}${req}<span class="hint">${f.hint}</span></label>${ctrl}`;
+      grid.appendChild(wrap);
+    });
+    fs.style.display = "";
+  } else fs.style.display = "none";
+});
+
+function num(id){ const v = $(id) ? $(id).value.trim() : ""; return v==="" ? null : Number(v); }
+
+function gather(){
+  const errs = [];
+  const mark = (id,bad)=>{ const el=$(id); if(el) el.classList.toggle("err",bad); };
+  const occId = occSel.value;
+  if(!occId) errs.push("Công năng chính");
+  const d = {
+    occ: occId,
+    floors: num("floors"), basements: num("basements") ?? 0,
+    areaFloor: num("areaFloor"), totalArea: num("totalArea"),
+    volume: num("volume"), hFire: num("hFire"),
+    extLevel: $("extLevel").value,
+    kids: num("x_kids"), seats: num("x_seats"), pplFloor: num("x_pplFloor"),
+    hazard: $("x_hazard") ? $("x_hazard").value : ""
+  };
+  [["floors","Số tầng nổi"],["areaFloor","Diện tích 1 tầng"],["totalArea","Tổng diện tích sàn ΣF"],["volume","Tổng khối tích V"],["hFire","Chiều cao PCCC"]].forEach(([id,lb])=>{
+    const bad = d[id]===null || isNaN(d[id]) || d[id]<0 || (id!=="hFire" && d[id]<=0);
+    mark(id,bad); if(bad) errs.push(lb);
+  });
+  const occ = OCCS.find(o=>o.id===occId);
+  if(occ && occ.extra){
+    occ.extra.forEach(k=>{
+      const f = EXTRA_FIELDS[k];
+      if(f.req){
+        const bad = f.select ? !d[k] : (d[k]===null||isNaN(d[k]));
+        mark("x_"+k,bad); if(bad) errs.push(f.label+" (dữ liệu phân nhánh)");
+      }
+    });
+  }
+  const soft = [];
+  if(d.totalArea!==null && d.areaFloor!==null && d.totalArea < d.areaFloor)
+    soft.push("ΣF nhỏ hơn diện tích 1 tầng — kiểm tra lại số liệu.");
+  return { d, errs, soft };
+}
+
+/* =====================================================================
+   KẾT XUẤT PHIẾU
+   ===================================================================== */
+const BADGE = { yes:'<span class="badge b-yes">BẮT BUỘC</span>', no:'<span class="badge b-no">KHÔNG BẮT BUỘC</span>', warn:'<span class="badge b-warn">⚠️ CẦN ĐỐI CHIẾU</span>', na:'<span class="badge b-na">KHÔNG NÊU</span>' };
+const BADGE_TD = { yes:'<span class="badge b-yes">THUỘC DIỆN</span>', no:'<span class="badge b-no">KHÔNG THUỘC</span>', warn:'<span class="badge b-warn">⚠️ CẦN ĐỐI CHIẾU</span>', na:'<span class="badge b-na">CHƯA KẾT LUẬN</span>' };
+const noteHtml = arr => arr && arr.length ? arr.map(n=>`<div class="note">${n}</div>`).join("") : "";
+
+function render(d){
+  const occ = OCCS.find(o=>o.id===d.occ);
+  const td = evalThamDinh(d);
+  const bc = evalBaoChay(d), sp = evalSprinkler(d), hn = evalHongNuoc(d), nn = evalNgoaiNha(d);
+  const pd = evalPhaDo(d), mn = evalMatNa(d), loa = evalLoa(d), cg = evalCoGioi(d);
+  const binh = evalBinh(d), den = evalDen(d);
+
+  const now = new Date();
+  const soPhieu = "TVSB-" + now.getFullYear() + String(now.getMonth()+1).padStart(2,"0") + String(now.getDate()).padStart(2,"0") + "-" + String(now.getHours()).padStart(2,"0") + String(now.getMinutes()).padStart(2,"0");
+  const ngay = `ngày ${now.getDate()} tháng ${now.getMonth()+1} năm ${now.getFullYear()}`;
+
+  const stampCls = td.v==="yes" ? "" : (td.v==="no" ? "khong" : "warn");
+  const stampTxt = td.v==="yes" ? "Thuộc diện thẩm định" : (td.v==="no" ? "Không thuộc diện thẩm định" : "Cần đối chiếu thêm");
+
+  const row = (ten,r) => `<tr><td><b>${ten}</b></td><td>${r.detail}<span class="cc">Căn cứ: ${r.canCu}</span></td><td>${BADGE[r.v]}</td></tr>`;
+
+  /* BƯỚC 3/4 — phân nhánh nước */
+  let nuoc = "";
+  if(sp.v==="yes"){
+    nuoc = `<div class="note blue"><b>Công trình thuộc diện chữa cháy tự động (sprinkler).</b> Bước tiếp theo: tính lưu lượng – thời gian – dung tích bể và thông số bơm theo TCVN 7336:2021 (kho kệ cao h &gt; 5,5 m: TCVN 14496:2025). Đầu vào cần gom: số tầng, ΣF, V, nhóm nguy cơ cháy theo công năng${d.occ==="chungcu"?", chiều dài hành lang":""}${["kho","sanxuat"].includes(d.occ)?", loại chất cháy và chiều cao xếp hàng/kệ h":""}. Phần tính toán này thực hiện bằng công cụ/skill <b>tinh-nuoc-chua-chay</b> riêng — ngoài phạm vi phiếu sơ bộ.</div>`;
+  } else if(hn.v==="yes"){
+    nuoc = `<div class="note blue"><b>Công trình chỉ thuộc diện hệ thống họng nước chữa cháy trong nhà</b>, không thuộc diện lắp đặt chữa cháy tự động sprinkler theo Bảng A.1. Chủ đầu tư có thể cân nhắc <b>tăng cường sprinkler tự nguyện</b>; khi đó cần bổ sung: loại chất cháy/hàng hóa, nhóm nguy cơ cháy${["kho","sanxuat"].includes(d.occ)?", chiều cao xếp hàng/kệ h, loại pallet":""} — rồi tính theo TCVN 7336:2021 bằng công cụ/skill <b>tinh-nuoc-chua-chay</b>.</div>`;
+  } else if(sp.v==="warn"){
+    nuoc = `<div class="note"><b>Chưa kết luận được diện chữa cháy tự động</b> (ô ⚠️ hoặc thuộc Bảng A.2/A.3) — đối chiếu bản gốc trước khi quyết định bước tính nước.</div>`;
+  } else {
+    nuoc = `<div class="note blue">Công trình không thuộc diện sprinkler và họng nước trong nhà theo kết quả sàng lọc — chưa phát sinh yêu cầu tính bể/bơm chữa cháy trong nhà ở bước sơ bộ (vẫn kiểm tra cấp nước ngoài nhà theo hạ tầng khu vực).</div>`;
+  }
+
+  /* BƯỚC 6 — tổng hợp */
+  const sumRow = (hm,r,badge) => `<tr><td>${hm}</td><td>${(badge||BADGE)[r.v]}</td><td><span style="font-family:var(--mono);font-size:11.5px">${r.canCu}</span></td></tr>`;
+  const nx = [];
+  nx.push(td.v==="yes" ? "Công trình <b>thuộc diện thẩm định thiết kế PCCC</b> theo Phụ lục III NĐ 105/2025 — hồ sơ thiết kế phải trình thẩm định trước khi thi công."
+        : td.v==="no" ? "Công trình <b>không thuộc diện thẩm định</b> thiết kế PCCC theo Phụ lục III NĐ 105/2025 (vẫn phải tuân thủ quy chuẩn khi thiết kế, thi công)."
+        : "Diện thẩm định <b>chưa kết luận cứng được</b> — vướng ô ⚠️/điều kiện cần xét thêm, đối chiếu bản gốc NĐ 105.");
+  const sysY = [["báo cháy tự động",bc],["chữa cháy tự động (sprinkler)",sp],["họng nước trong nhà",hn],["cấp nước ngoài nhà",nn]].filter(x=>x[1].v==="yes").map(x=>x[0]);
+  nx.push(sysY.length ? `Hệ thống bắt buộc theo QCVN 10: <b>${sysY.join("; ")}</b>.` : "Theo sàng lọc, chưa có hệ thống chính nào bắt buộc theo QCVN 10 — kiểm tra lại khi hồ sơ chi tiết hơn.");
+  const ptY = [["dụng cụ phá dỡ",pd],["mặt nạ lọc độc",mn],["loa thông báo",loa]].filter(x=>x[1].v==="yes").map(x=>x[0]);
+  const ptW = [["dụng cụ phá dỡ",pd],["mặt nạ lọc độc",mn],["loa thông báo",loa]].filter(x=>x[1].v==="warn").map(x=>x[0]);
+  if(ptY.length) nx.push(`Phương tiện phải trang bị: <b>${ptY.join("; ")}</b>; cùng bình chữa cháy xách tay và đèn sự cố/chỉ dẫn thoát nạn theo TCVN.`);
+  else nx.push("Bình chữa cháy xách tay và đèn sự cố/chỉ dẫn thoát nạn trang bị theo TCVN 7435-1 và TCVN 13456 như mục 5.");
+  if(ptW.length) nx.push(`Hạng mục còn treo do ô ⚠️/thiếu dữ liệu: <b>${ptW.join("; ")}</b> — xác nhận trước khi chốt phiếu.`);
+  const anyWarn = [td,bc,sp,hn,nn,pd,mn,loa].some(r=>r.v==="warn");
+  if(anyWarn) nx.push("Phiếu có kết luận dựa trên bảng dựng từ bản OCR (ô ⚠️) — <b>bắt buộc đối chiếu bản gốc văn bản</b> trước khi sử dụng chính thức.");
+
+  $("phieu").innerHTML = `
+    <div class="phieu-head">
+      <div>
+        <div class="eyebrow">Phiếu tư vấn sơ bộ</div>
+        <h2>${occ.label}</h2>
+        <div class="sub">${d.floors} tầng nổi${d.basements>0?` + ${d.basements} tầng hầm`:""} · DT tầng ${fmt(d.areaFloor)} m² · ΣF ${fmt(d.totalArea)} m² · V ${fmt(d.volume)} m³ · Chiều cao PCCC ${d.hFire} m${d.hazard?` · Hạng ${d.hazard}`:""}${d.kids!==null?` · ${fmt(d.kids)} cháu`:""}${d.seats!==null?` · ${fmt(d.seats)} chỗ`:""}</div>
+      </div>
+      <div class="phieu-meta">Số: <b>${soPhieu}</b><br>TP. Hồ Chí Minh, ${ngay}</div>
+    </div>
+
+    <section class="buoc">
+      <div class="buoc-tag"><span class="num">BƯỚC 1</span><h3>Diện thẩm định thiết kế PCCC</h3></div>
+      <div class="card">
+        <div class="stamp-row">
+          <div class="stamp ${stampCls}">${stampTxt}</div>
+          <div class="stamp-note">${td.detail}<span class="cc" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);display:block;margin-top:4px">Căn cứ: ${td.canCu}</span></div>
+        </div>
+        ${noteHtml(td.notes)}
+      </div>
+    </section>
+
+    <section class="buoc">
+      <div class="buoc-tag"><span class="num">BƯỚC 2</span><h3>Hệ thống PCCC bắt buộc (QCVN 10:2025/BCA)</h3></div>
+      <div class="tbl-wrap"><table>
+        <tr><th style="width:22%">Hệ thống</th><th>Đối chiếu ngưỡng</th><th style="width:16%">Kết luận</th></tr>
+        ${row("Báo cháy tự động",bc)}
+        ${row("Chữa cháy tự động (sprinkler)",sp)}
+        ${row("Họng nước trong nhà",hn)}
+        ${row("Cấp nước ngoài nhà",nn)}
+      </table></div>
+      ${noteHtml([...(bc.notes||[]),...(sp.notes||[])])}
+    </section>
+
+    <section class="buoc">
+      <div class="buoc-tag"><span class="num">BƯỚC 3–4</span><h3>Nước chữa cháy — hướng xử lý tiếp theo</h3></div>
+      ${nuoc}
+    </section>
+
+    <section class="buoc">
+      <div class="buoc-tag"><span class="num">BƯỚC 5</span><h3>Phương tiện & hạng mục khác phải trang bị</h3></div>
+      <div class="card">
+        <div class="item"><h4>Dụng cụ phá dỡ thô sơ ${BADGE[pd.v]}</h4><p>${pd.detail}</p><span class="cc">Căn cứ: ${pd.canCu}</span></div>
+        <div class="item"><h4>Mặt nạ lọc độc / phòng độc cách ly ${BADGE[mn.v]}</h4><p>${mn.detail}</p><span class="cc">Căn cứ: ${mn.canCu}</span></div>
+        <div class="item"><h4>Loa thông báo & hướng dẫn thoát nạn ${BADGE[loa.v]}</h4><p>${loa.detail}</p><span class="cc">Căn cứ: ${loa.canCu}</span>${noteHtml(loa.notes)}</div>
+        <div class="item"><h4>Phương tiện chữa cháy cơ giới ${BADGE[cg.v]}</h4><p>${cg.detail}</p><span class="cc">Căn cứ: ${cg.canCu}</span></div>
+        <div class="item"><h4>Bình chữa cháy xách tay <span class="badge b-yes">TRANG BỊ</span></h4><p>${binh.detail}</p><span class="cc">Căn cứ: ${binh.canCu}</span>${noteHtml(binh.notes)}</div>
+        <div class="item"><h4>Đèn chiếu sáng sự cố & chỉ dẫn thoát nạn <span class="badge b-yes">TRANG BỊ</span></h4>
+          <p>Vị trí bắt buộc lắp đèn chiếu sáng sự cố:</p>
+          <ul class="pos">${den.pos.map(p=>`<li>${p}</li>`).join("")}</ul>
+          <span class="cc">Căn cứ: ${den.canCu}</span>${noteHtml(den.notes)}
+        </div>
+      </div>
+    </section>
+
+    <section class="buoc">
+      <div class="buoc-tag"><span class="num">BƯỚC 6</span><h3>Bảng tổng hợp & nhận xét</h3></div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Hạng mục</th><th style="width:20%">Kết luận</th><th style="width:34%">Căn cứ</th></tr>
+        ${sumRow("Thẩm định thiết kế PCCC",td,BADGE_TD)}
+        ${sumRow("Báo cháy tự động",bc)}
+        ${sumRow("Chữa cháy tự động (sprinkler)",sp)}
+        ${sumRow("Họng nước trong nhà",hn)}
+        ${sumRow("Cấp nước ngoài nhà",nn)}
+        ${sumRow("Dụng cụ phá dỡ thô sơ",pd)}
+        ${sumRow("Mặt nạ lọc độc",mn)}
+        ${sumRow("Loa thông báo thoát nạn",loa)}
+        ${sumRow("Chữa cháy cơ giới",cg)}
+        <tr><td>Bình chữa cháy xách tay</td><td><span class="badge b-yes">TRANG BỊ</span></td><td><span style="font-family:var(--mono);font-size:11.5px">TCVN 7435-1:2004</span></td></tr>
+        <tr><td>Đèn sự cố / chỉ dẫn thoát nạn</td><td><span class="badge b-yes">TRANG BỊ</span></td><td><span style="font-family:var(--mono);font-size:11.5px">TCVN 13456:2022</span></td></tr>
+      </table></div>
+      <div class="nhanxet" style="margin-top:14px"><b>Nhận xét:</b><ul>${nx.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+      <div class="actions no-print" style="margin-top:16px">
+        <button type="button" class="btn-main" onclick="window.print()">In / xuất PDF phiếu</button>
+      </div>
+      <div class="disclaimer">
+        <b>Lưu ý sử dụng:</b> Phiếu này là kết quả <b>sàng lọc sơ bộ</b> theo logic cố định, dùng tham khảo nội bộ — không thay thế thẩm định chính thức của cơ quan Cảnh sát PCCC&amp;CNCH và không thay thế đánh giá của kỹ sư đối với trường hợp đặc thù (công năng hỗn hợp phức tạp; khu vực/gian phòng/thiết bị theo Bảng A.2/A.3/A.4; chống khói theo QCVN 06 Phụ lục D — xử lý ở bước riêng). Các ô đánh dấu ⚠️ dựng từ bản OCR, <b>bắt buộc đối chiếu bản gốc văn bản</b> trước khi sử dụng chính thức. TCVN 3890 đã hết hiệu lực — không dùng.
+      </div>
+    </section>`;
+  $("phieu").classList.add("show");
+  $("phieu").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+/* ---------- Sự kiện ---------- */
+$("frm").addEventListener("submit", e => {
+  e.preventDefault();
+  const { d, errs, soft } = gather();
+  const msg = $("formMsg");
+  if(errs.length){
+    msg.innerHTML = "<b>DỪNG — thiếu dữ liệu bắt buộc</b> (Luật cứng số 1: không giả thiết dữ liệu phân nhánh): " + errs.join("; ") + ".";
+    msg.classList.add("show");
+    $("phieu").classList.remove("show");
+    return;
+  }
+  msg.classList.remove("show");
+  if(soft.length){
+    msg.innerHTML = "Cảnh báo số liệu: " + soft.join(" ");
+    msg.classList.add("show");
+  }
+  render(d);
+});
+$("btnReset").addEventListener("click", () => {
+  $("frm").reset(); $("fsExtra").style.display="none"; $("extraGrid").innerHTML="";
+  $("formMsg").classList.remove("show");
+  document.querySelectorAll("input.err").forEach(el=>el.classList.remove("err"));
+  $("phieu").classList.remove("show"); $("phieu").innerHTML="";
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
+</script>
+</body>
+</html>
