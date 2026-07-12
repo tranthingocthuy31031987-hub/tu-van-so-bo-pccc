@@ -163,11 +163,15 @@ ul.pos li{margin-bottom:2px}
           <select id="occ"></select>
         </div>
         <div class="field">
-          <label for="floors">Số tầng nổi <span class="req">*</span></label>
+          <label for="floors">Số tầng nổi <span class="req">*</span><span class="hint">Không kể tầng bán hầm</span></label>
           <input id="floors" type="number" min="1" step="1" inputmode="numeric" placeholder="VD: 5">
         </div>
         <div class="field">
-          <label for="basements">Số tầng hầm / bán hầm <span class="hint">Nhập 0 nếu không có</span></label>
+          <label for="semiBasements">Số tầng bán hầm <span class="hint">Bán hầm được tính như 1 tầng nổi khi so ngưỡng số tầng — nhập 0 nếu không có</span></label>
+          <input id="semiBasements" type="number" min="0" step="1" inputmode="numeric" value="0">
+        </div>
+        <div class="field">
+          <label for="basements">Số tầng hầm <span class="hint">Hầm hoàn toàn — nhập 0 nếu không có</span></label>
           <input id="basements" type="number" min="0" step="1" inputmode="numeric" value="0">
         </div>
         <div class="field">
@@ -394,7 +398,7 @@ function evalThamDinh(d){
    BƯỚC 2 — Hệ thống bắt buộc theo QCVN 10:2025/BCA
    ===================================================================== */
 function evalBaoChay(d){
-  const F=d.totalArea,T=d.floors,H=d.hFire,B=d.basements>0;
+  const F=d.totalArea,T=d.floors,H=d.hFire,B=(d.basements>0||d.semiBasements>0);
   const cc = s => `QCVN 10:2025/BCA, Bảng A.1, STT ${s}`;
   switch(d.occ){
     case "chungcu": return T>=5||F>=700 ? R("yes","Đạt ngưỡng: cao ≥ 5 tầng hoặc ΣF ≥ 700 m².",cc(3),[T<5&&F<1500?"Cho phép dùng thiết bị báo cháy độc lập khi < 5 tầng và < 1.500 m².":""].filter(Boolean)) : R("no","Chưa đạt ngưỡng cao ≥ 5 tầng và ΣF ≥ 700 m².",cc(3));
@@ -429,7 +433,7 @@ function evalBaoChay(d){
 }
 
 function evalSprinkler(d){
-  const F=d.totalArea,T=d.floors,H=d.hFire,B=d.basements>0;
+  const F=d.totalArea,T=d.floors,H=d.hFire,B=(d.basements>0||d.semiBasements>0);
   const cc = s => `QCVN 10:2025/BCA, Bảng A.1, STT ${s}`;
   const hf = th => `chiều cao PCCC ${H} m so ngưỡng ≥ ${th} m`;
   switch(d.occ){
@@ -471,7 +475,7 @@ function evalSprinkler(d){
 }
 
 function evalHongNuoc(d){
-  const F=d.totalArea,T=d.floors,B=d.basements>0;
+  const F=d.totalArea,T=d.floors,B=(d.basements>0||d.semiBasements>0);
   const cc = "QCVN 10:2025/BCA, Phụ lục B";
   switch(d.occ){
     case "chungcu": return T>=7 ? R("yes","Đạt ngưỡng: nhà ở/công trình công cộng cao ≥ 7 tầng.",cc) : R("no","Chưa đạt ngưỡng cao ≥ 7 tầng (nhóm nhà ở, công trình công cộng chung).",cc);
@@ -592,7 +596,7 @@ function evalDen(d){
     "Phòng trực điều khiển chống cháy, phòng bơm chữa cháy, vị trí đặt phương tiện PCCC",
     "Gian phòng có người làm việc mà điểm xa nhất → lối ra > 13 m"
   ];
-  if(d.occ==="garakin"||d.basements>0) pos.splice(4,0,"Gara / tầng hầm để xe");
+  if(d.occ==="garakin"||d.basements>0||d.semiBasements>0) pos.splice(4,0,"Gara / tầng hầm, bán hầm để xe");
   const notes = [
     "Nguồn dự phòng duy trì ≥ 120 phút (mục 4.5); độ rọi đường thoát nạn ≥ 1 lux tại tim đường, gian phòng ≥ 0,5 lux (5.1.2–5.1.3).",
     "Biển báo \"LỐI RA/EXIT\" nền xanh lá chữ trắng; khoảng cách giữa các biển ≤ 25 m (5.2.6); biển chỉ hướng tại vị trí tầm nhìn che khuất.",
@@ -765,7 +769,7 @@ function evalNuoc(d, sp, hn, nn){
 
   /* --- FREEZE INPUT --- */
   freeze.push(["Công năng", OCCS.find(o=>o.id===d.occ).label]);
-  freeze.push(["Số tầng / khối tích", `${d.floors} tầng nổi${d.basements>0?" + "+d.basements+" hầm":""} / ${fmt(d.volume)} m³`]);
+  freeze.push(["Số tầng / khối tích", `${d.floorsNoi} tầng nổi${d.semiBasements>0?" + "+d.semiBasements+" bán hầm (tính toán: "+d.floors+" tầng)":""}${d.basements>0?" + "+d.basements+" hầm":""} / ${fmt(d.volume)} m³`]);
   freeze.push(["Có sprinkler", coSpr ? (sprTuNguyen?"Có (tăng cường tự nguyện)":"Có (bắt buộc)") : "Không"]);
   if(d.nhomNC) freeze.push(["Nhóm nguy cơ cháy", "Nhóm "+d.nhomNC+" (Phụ lục A TCVN 7336)"]);
   if(d.occ==="chungcu"&&d.corridor) freeze.push(["Hành lang chung", d.corridor==="gt10"?"> 10 m":"≤ 10 m"]);
@@ -845,9 +849,13 @@ function gather(){
   const mark = (id,bad)=>{ const el=$(id); if(el) el.classList.toggle("err",bad); };
   const occId = occSel.value;
   if(!occId) errs.push("Công năng chính");
+  const floorsNoi = num("floors");
+  const semiBasements = num("semiBasements") ?? 0;
   const d = {
     occ: occId,
-    floors: num("floors"), basements: num("basements") ?? 0,
+    floorsNoi, semiBasements,
+    floors: (floorsNoi ?? 0) + semiBasements, /* bán hầm tính như 1 tầng nổi khi so ngưỡng */
+    basements: num("basements") ?? 0,
     areaFloor: num("areaFloor"), totalArea: num("totalArea"),
     volume: num("volume"), hFire: num("hFire"),
     extLevel: $("extLevel").value,
@@ -858,8 +866,8 @@ function gather(){
     corridor: $("corridor").value, bcl: $("bcl").value, capS: $("capS").value,
     tangCuong: $("chkTangCuong").checked
   };
-  [["floors","Số tầng nổi"],["areaFloor","Diện tích 1 tầng"],["totalArea","Tổng diện tích sàn ΣF"],["volume","Tổng khối tích V"],["hFire","Chiều cao PCCC"]].forEach(([id,lb])=>{
-    const bad = d[id]===null || isNaN(d[id]) || d[id]<0 || (id!=="hFire" && d[id]<=0);
+  [["floorsNoi","floors","Số tầng nổi"],["areaFloor","areaFloor","Diện tích 1 tầng"],["totalArea","totalArea","Tổng diện tích sàn ΣF"],["volume","volume","Tổng khối tích V"],["hFire","hFire","Chiều cao PCCC"]].forEach(([key,id,lb])=>{
+    const bad = d[key]===null || isNaN(d[key]) || d[key]<0 || (id!=="hFire" && d[key]<=0);
     mark(id,bad); if(bad) errs.push(lb);
   });
   const occ = OCCS.find(o=>o.id===occId);
@@ -980,7 +988,7 @@ function render(d){
       <div>
         <div class="eyebrow">Phiếu tư vấn sơ bộ</div>
         <h2>${occ.label}</h2>
-        <div class="sub">${d.floors} tầng nổi${d.basements>0?` + ${d.basements} tầng hầm`:""} · DT tầng ${fmt(d.areaFloor)} m² · ΣF ${fmt(d.totalArea)} m² · V ${fmt(d.volume)} m³ · Chiều cao PCCC ${d.hFire} m${d.hazard?` · Hạng ${d.hazard}`:""}${d.kids!==null?` · ${fmt(d.kids)} cháu`:""}${d.seats!==null?` · ${fmt(d.seats)} chỗ`:""}</div>
+        <div class="sub">${d.floorsNoi} tầng nổi${d.semiBasements>0?` + ${d.semiBasements} bán hầm (số tầng tính toán: ${d.floors})`:""}${d.basements>0?` + ${d.basements} tầng hầm`:""} · DT tầng ${fmt(d.areaFloor)} m² · ΣF ${fmt(d.totalArea)} m² · V ${fmt(d.volume)} m³ · Chiều cao PCCC ${d.hFire} m${d.hazard?` · Hạng ${d.hazard}`:""}${d.kids!==null?` · ${fmt(d.kids)} cháu`:""}${d.seats!==null?` · ${fmt(d.seats)} chỗ`:""}</div>
       </div>
       <div class="phieu-meta">Số: <b>${soPhieu}</b><br>TP. Hồ Chí Minh, ${ngay}</div>
     </div>
@@ -993,6 +1001,7 @@ function render(d){
           <div class="stamp-note">${td.detail}<span class="cc" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);display:block;margin-top:4px">Căn cứ: ${td.canCu}</span></div>
         </div>
         ${noteHtml(td.notes)}
+        ${d.semiBasements>0 ? '<div class="note blue">Tầng bán hầm được tính như 1 tầng nổi khi so các ngưỡng "cao ≥ X tầng" (số tầng tính toán = '+d.floors+' tầng). Đồng thời, các nhánh "tầng hầm/bán hầm" của Bảng A.1 và Phụ lục B QCVN 10 vẫn được xét vì bảng nêu rõ cả bán hầm.</div>' : ''}
       </div>
     </section>
 
