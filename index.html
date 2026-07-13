@@ -220,7 +220,7 @@ ul.pos li{margin-bottom:2px}
     <button class="subtab active" data-gas="solkhi">Sol-khí</button>
     <button class="subtab" data-gas="co2">Khí CO₂</button>
     <button class="subtab" data-gas="fm200">Khí FM200 / Novec</button>
-    <button class="subtab" data-gas="ig" disabled>Khí IG<span class="soon">sắp có</span></button>
+    <button class="subtab" data-gas="ig">Khí IG</button>
   </div>
 </div>
 
@@ -553,16 +553,65 @@ ul.pos li{margin-bottom:2px}
     <div class="gas-result" id="fm-res" aria-live="polite"></div>
   </div>
 
-  <!-- ============ IG (sắp có) ============ -->
+  <!-- ============ KHÍ IG ============ -->
   <div class="gas-panel" id="gas-ig">
     <header class="gas-head">
-      <div class="eyebrow2" style="color:var(--amber)">Chữa cháy bằng khí trơ</div>
-      <h2>Tính khí IG-541 / IG-100 / IG-55 / IG-01</h2>
+      <div class="eyebrow2" style="color:var(--amber)">Chữa cháy bằng khí trơ (Inert Gas)</div>
+      <h2>Tính khối lượng khí IG-541 / IG-100 / IG-55 / IG-01</h2>
+      <p>Khí trơ dùng công thức logarit tự nhiên (khác khí hóa lỏng FM200/Novec). Hằng số k₁, k₂ lấy từ ISO 14520 — Water đối chiếu lại với TCVN 7161 phần tương ứng khi có bản gốc. Nồng độ thiết kế c (%) nhập tay theo bảng trong tiêu chuẩn.</p>
+      <div class="gas-tags">
+        <span>ISO 14520 (tham chiếu tạm)</span>
+        <span>TCVN 7161 phần IG</span>
+        <span>⚠️ k₁,k₂ cần đối chiếu bản gốc VN</span>
+      </div>
     </header>
-    <div class="ig-soon">
-      <div class="big">Sắp có</div>
-      <p>Module tính khí trơ (Inergen IG-541, Nitơ IG-100, Argonite IG-55, Argon IG-01) đang được xây dựng. Công thức khí trơ dùng dạng logarit (khác khí hóa lỏng) — cần bổ sung bảng nồng độ thiết kế và hằng số thể tích riêng theo TCVN 7161 phần tương ứng. Water gửi bảng số liệu là mình bổ sung ngay.</p>
+
+    <div class="formula-card">
+      <div class="eq">m = V × (1/S) × ln[100/(100 − c)]</div>
+      <div class="eq-note">S = k₁ + k₂·T &nbsp;·&nbsp; ln: logarit tự nhiên &nbsp;·&nbsp; c: nồng độ thiết kế (%) &nbsp;·&nbsp; V: thể tích bảo vệ (m³)</div>
     </div>
+
+    <div class="card" style="background:var(--amber-wash);border-color:#EBD3A0;border-left:4px solid var(--amber);margin-bottom:18px;font-size:13.5px;color:var(--amber)">
+      <b>Hằng số k₁, k₂ đang dùng từ ISO 14520 (tạm thời)</b> — khi Water có file TCVN 7161 phần IG tương ứng, gửi cho mình để cập nhật đúng bản Việt Nam.
+    </div>
+
+    <form class="card no-print" id="frm-ig" novalidate>
+      <fieldset>
+        <legend>Thông số nhập</legend>
+        <div class="grid">
+          <div class="field full">
+            <label for="ig-gas">Loại khí IG <span class="req">*</span></label>
+            <select id="ig-gas">
+              <option value="ig541">IG-541 (Inergen: 52% N₂ + 40% Ar + 8% CO₂) — k₁=0,6598 · k₂=0,002011</option>
+              <option value="ig100">IG-100 (Nitơ 100%) — k₁=0,7997 · k₂=0,002741</option>
+              <option value="ig55" >IG-55 (Argonite: 50% N₂ + 50% Ar) — k₁=0,6816 · k₂=0,002280</option>
+              <option value="ig01" >IG-01 (Argon 100%) — k₁=0,5685 · k₂=0,001902</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="ig-t">Nhiệt độ thiết kế T (°C) <span class="req">*</span>
+              <span class="hint">Nhiệt độ trong khu vực bảo vệ. Mặc định 20°C</span></label>
+            <input id="ig-t" type="number" step="0.1" inputmode="decimal" value="20">
+          </div>
+          <div class="field">
+            <label for="ig-c">Nồng độ thiết kế c (%) <span class="req">*</span>
+              <span class="hint">Tra bảng nồng độ trong TCVN 7161 phần tương ứng theo loại chất cháy. VD IG-541 đám cháy bề mặt loại A: ~40,9%; loại B (n-heptan): ~38,5%</span></label>
+            <input id="ig-c" type="number" min="1" max="99" step="0.1" inputmode="decimal" placeholder="VD: 40.9">
+          </div>
+          <div class="field full">
+            <label for="ig-v">Thể tích khu vực bảo vệ V (m³) <span class="req">*</span>
+              <span class="hint">Thể tích bao che trừ cấu kiện cố định không thấm khí. Cộng thể tích ống gió nếu không đóng kín được</span></label>
+            <input id="ig-v" type="number" min="0" step="0.1" inputmode="decimal" placeholder="VD: 80">
+          </div>
+        </div>
+        <div class="gas-msg" id="ig-msg" role="alert"></div>
+        <div class="actions">
+          <button type="submit" class="btn-main">Tính khối lượng</button>
+          <button type="button" class="btn-ghost" data-reset="ig">Nhập lại</button>
+        </div>
+      </fieldset>
+    </form>
+    <div class="gas-result" id="ig-res" aria-live="polite"></div>
   </div>
 
 </div>
@@ -1605,7 +1654,37 @@ $("btnReset").addEventListener("click", () => {
       if(g==="solkhi"){ q("frm-solkhi").reset(); q("sk-f2").value="1.0"; hideMsg("sk-msg"); q("sk-res").classList.remove("show"); }
       if(g==="co2"){ q("frm-co2").reset(); q("co2-kb").value="1.0"; ["co2-aov","co2-vz","co2-vg"].forEach(id=>q(id).value="0"); hideMsg("co2-msg"); q("co2-res").classList.remove("show"); }
       if(g==="fm200"){ q("frm-fm200").reset(); q("fm-t").value="20"; hideMsg("fm-msg"); q("fm-res").classList.remove("show"); }
+      if(g==="ig"){ q("frm-ig").reset(); q("ig-t").value="20"; hideMsg("ig-msg"); q("ig-res").classList.remove("show"); }
     });
+  });
+
+  /* ---- Khí IG (trơ): m = V × (1/S) × ln(100/(100−c)), S = k₁ + k₂T ---- */
+  /* Hằng số từ ISO 14520 — đối chiếu lại TCVN 7161 khi có bản VN */
+  const KIG = {
+    ig541:{ k1:0.6598, k2:0.002011, ten:"IG-541 (Inergen)" },
+    ig100:{ k1:0.7997, k2:0.002741, ten:"IG-100 (Nitơ)" },
+    ig55: { k1:0.6816, k2:0.002280, ten:"IG-55 (Argonite)" },
+    ig01: { k1:0.5685, k2:0.001902, ten:"IG-01 (Argon)" }
+  };
+  q("frm-ig").addEventListener("submit", e=>{
+    e.preventDefault();
+    const gas=q("ig-gas").value, T=val("ig-t"), c=val("ig-c"), V=val("ig-v");
+    const errs=[];
+    if(T===null) errs.push("T");
+    if(c===null||c<=0||c>=100) errs.push("c (0 < c < 100)");
+    if(V===null||V<=0) errs.push("V (> 0)");
+    if(errs.length){ showMsg("ig-msg","<b>Thiếu/sai dữ liệu:</b> "+errs.join("; ")+"."); q("ig-res").classList.remove("show"); return; }
+    hideMsg("ig-msg");
+    const k=KIG[gas], S=k.k1+k.k2*T, lnVal=Math.log(100/(100-c)), mv=(1/S)*lnVal, m=mv*V;
+    renderResult("ig-res",
+      row("Loại khí", k.ten)+
+      row("Thể tích riêng S = k₁ + k₂·T", nf(S,5)+" m³/kg")+
+      row("Nồng độ thiết kế c", nf(c,1)+" %")+
+      row("ln[100/(100−c)]", nf(lnVal,5))+
+      row("Lượng khí trên 1 m³ (m/V)", nf(mv,4)+" kg/m³")+
+      row("Thể tích bảo vệ V", nf(V,2)+" m³")+
+      row("⚠️ Hằng số k₁,k₂ từ ISO 14520 — đối chiếu TCVN 7161", ""),
+      "Khối lượng khí "+k.ten, nf(m,2)+" kg");
   });
 })();
 
