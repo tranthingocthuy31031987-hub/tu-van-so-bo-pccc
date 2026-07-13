@@ -201,6 +201,23 @@ ul.pos li{margin-bottom:2px}
 .ig-soon{text-align:center;padding:56px 20px}
 .ig-soon .big{font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);border:2px dashed #E0C88A;background:var(--amber-wash);display:inline-block;padding:16px 30px;border-radius:6px;font-weight:600}
 .ig-soon p{color:var(--ink-soft);font-size:14px;max-width:520px;margin:18px auto 0}
+
+/* ===== Hỏi đáp pháp lý ===== */
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+@media(max-width:640px){.qa-grid{grid-template-columns:1fr}}
+.qa-card{display:block;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px 22px 20px;text-decoration:none;color:inherit;transition:border-color .15s,box-shadow .15s,transform .15s}
+.qa-card:hover{border-color:var(--ink);box-shadow:0 4px 14px rgba(28,39,51,.08);transform:translateY(-1px)}
+.qa-card:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.qa-card-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.qa-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:16px;color:#fff;flex-shrink:0}
+.qa-icon-nblm{background:linear-gradient(135deg,#4285F4,#8E44AD)}
+.qa-icon-gpt{background:#10A37F}
+.qa-badge{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.qa-card h3{font-size:17px;font-weight:800;color:var(--ink);margin-bottom:8px}
+.qa-card p{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin-bottom:16px}
+.qa-cta{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--red);letter-spacing:.02em;display:inline-flex;align-items:center;gap:5px}
+.qa-card .arrow{transition:transform .15s}
+.qa-card:hover .arrow{transform:translateX(3px)}
 </style>
 </head>
 <body>
@@ -211,6 +228,7 @@ ul.pos li{margin-bottom:2px}
     <div class="tabs">
       <button class="tab active" data-view="huongdan">Hướng dẫn thiết kế PCCC</button>
       <button class="tab" data-view="khi">Tính toán khí chữa cháy</button>
+      <button class="tab" data-view="hoidap">Hỏi đáp pháp lý</button>
     </div>
   </div>
 </nav>
@@ -614,6 +632,42 @@ ul.pos li{margin-bottom:2px}
     <div class="gas-result" id="ig-res" aria-live="polite"></div>
   </div>
 
+</div>
+</section>
+
+<section id="view-hoidap" class="view">
+<div class="wrap">
+  <header class="gas-head">
+    <div class="eyebrow2" style="color:var(--red)">Hỏi đáp pháp lý PCCC</div>
+    <h2>Trợ lý hỏi đáp quy chuẩn, tiêu chuẩn PCCC</h2>
+    <p>Hai trợ lý AI đã được huấn luyện riêng trên bộ văn bản pháp lý PCCC (NĐ 105/2025, QCVN 10:2025/BCA, các TCVN liên quan). Chọn 1 trợ lý để mở cửa sổ hỏi đáp ở tab mới — cả hai nền tảng đều yêu cầu đăng nhập tài khoản (Google / OpenAI) đã được cấp quyền truy cập.</p>
+  </header>
+
+  <div class="qa-grid">
+    <a class="qa-card" href="https://notebooklm.google.com/notebook/4b262d6d-4a62-44b0-ae41-9d58ead71cfb" target="_blank" rel="noopener noreferrer">
+      <div class="qa-card-top">
+        <div class="qa-icon qa-icon-nblm" aria-hidden="true">N</div>
+        <span class="qa-badge">Google NotebookLM</span>
+      </div>
+      <h3>Notebook PCCC</h3>
+      <p>Hỏi đáp dựa trên các nguồn tài liệu đã nạp vào notebook (văn bản pháp lý, bảng đối chiếu, tiêu chuẩn). Phù hợp khi cần câu trả lời bám sát nguồn có trích dẫn cụ thể.</p>
+      <span class="qa-cta">Mở NotebookLM <span class="arrow">→</span></span>
+    </a>
+
+    <a class="qa-card" href="https://chatgpt.com/g/g-p-69398cd9049c8191a03db718e410642e-ai-tham-duyet-pccc/project?tab=sources" target="_blank" rel="noopener noreferrer">
+      <div class="qa-card-top">
+        <div class="qa-icon qa-icon-gpt" aria-hidden="true">G</div>
+        <span class="qa-badge">Custom GPT</span>
+      </div>
+      <h3>AI Thẩm duyệt PCCC</h3>
+      <p>Trợ lý GPT tùy chỉnh với bộ nguồn PCCC riêng, phù hợp cho hỏi đáp linh hoạt, soạn thảo văn bản, hoặc phân tích tình huống thẩm duyệt cụ thể.</p>
+      <span class="qa-cta">Mở ChatGPT <span class="arrow">→</span></span>
+    </a>
+  </div>
+
+  <div class="note blue" style="margin-top:20px">
+    <b>Lưu ý kỹ thuật:</b> Cả NotebookLM và ChatGPT (Custom GPT) đều không hỗ trợ nhúng cửa sổ hỏi đáp trực tiếp vào trang web bên ngoài (do chính sách bảo mật của Google/OpenAI) — vì vậy các nút trên sẽ mở trợ lý ở tab trình duyệt mới thay vì hiển thị ngay tại trang này. Bạn cần đã đăng nhập và được cấp quyền truy cập notebook/GPT tương ứng.
+  </div>
 </div>
 </section>
 </main>
