@@ -151,6 +151,7 @@ ul.pos li{margin-bottom:2px}
 .tab:hover{color:var(--ink)}
 .tab.active{color:var(--red);border-bottom-color:var(--red)}
 .tab:focus-visible{outline:2px solid var(--red);outline-offset:-2px}
+.tab .soon{font-size:9.5px;background:var(--line);color:var(--ink-soft);border-radius:3px;padding:1px 5px;margin-left:5px;letter-spacing:.04em;vertical-align:middle;font-weight:600;font-family:var(--mono)}
 
 /* ===== Thanh điều hướng phụ (chọn loại khí) ===== */
 .subnav{background:var(--paper);border-bottom:1px solid var(--line)}
@@ -218,6 +219,16 @@ ul.pos li{margin-bottom:2px}
 .qa-cta{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--red);letter-spacing:.02em;display:inline-flex;align-items:center;gap:5px}
 .qa-card .arrow{transition:transform .15s}
 .qa-card:hover .arrow{transform:translateX(3px)}
+
+/* ===== Chuyển panel công cụ tính ===== */
+.calc-panel{display:none}
+.calc-panel.active{display:block}
+
+/* ===== Thư viện pháp luật ===== */
+.lib-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.lib-hint{font-size:13px;color:var(--ink-soft)}
+.lib-frame-wrap{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card);box-shadow:0 1px 0 rgba(28,39,51,.04)}
+.lib-frame{width:100%;height:70vh;min-height:520px;border:0;display:block}
 </style>
 </head>
 <body>
@@ -226,13 +237,23 @@ ul.pos li{margin-bottom:2px}
   <div class="topnav-inner">
     <div class="brand"><span class="dot"></span>PCCC · Công cụ kỹ sư</div>
     <div class="tabs">
-      <button class="tab active" data-view="huongdan">Hướng dẫn thiết kế PCCC</button>
-      <button class="tab" data-view="khi">Tính toán khí chữa cháy</button>
-      <button class="tab" data-view="hoidap">Hỏi đáp pháp lý</button>
+      <button class="tab active" data-view="huongdan">Hướng dẫn thiết kế về PCCC</button>
+      <button class="tab" data-view="congcu">Công cụ tính toán</button>
+      <button class="tab" data-view="aiho">AI kiểm tra hồ sơ<span class="soon">sắp có</span></button>
+      <button class="tab" data-view="thuvien">Thư viện pháp luật PCCC</button>
+      <button class="tab" data-view="aitroly">AI trợ lý</button>
     </div>
   </div>
 </nav>
-<div class="subnav no-print" id="subnav" hidden>
+<div class="subnav no-print" id="subnav-congcu" hidden>
+  <div class="subnav-inner">
+    <span class="sublabel">Loại hình:</span>
+    <button class="subtab active" data-calc="nuoc">💧 Chữa cháy bằng nước</button>
+    <button class="subtab" data-calc="khi">🧯 Chữa cháy bằng khí</button>
+    <button class="subtab" data-calc="bot">🫧 Chữa cháy bằng bọt</button>
+  </div>
+</div>
+<div class="subnav no-print" id="subnav-khi" hidden style="border-top:1px solid var(--line-soft)">
   <div class="subnav-inner">
     <span class="sublabel">Loại khí:</span>
     <button class="subtab active" data-gas="solkhi">Sol-khí</button>
@@ -412,6 +433,40 @@ ul.pos li{margin-bottom:2px}
             <option value="S2">S2</option><option value="S3">S3</option>
           </select>
         </div>
+        <div class="field full" id="fBotNote" style="display:none">
+          <div class="note" style="margin:0;background:var(--amber-wash);border:1px solid #EBD3A0;border-left:4px solid var(--amber);color:var(--amber)">
+            <b>Nhóm nguy cơ này dùng hệ chữa cháy bằng BỌT</b> (không phải nước). Nhập diện tích và thông số bọt bên dưới để tính lượng dung dịch, chất tạo bọt và nước — theo TCVN 7336 & TCVN 5307.
+          </div>
+        </div>
+        <div class="field" id="fBotS" style="display:none">
+          <label for="botS">Diện tích tính toán chữa cháy bọt S (m²) <span class="req">*</span>
+            <span class="hint">Diện tích mặt thoáng/gian phòng cháy tính toán lớn nhất</span></label>
+          <input id="botS" type="number" min="0" step="0.1" inputmode="decimal" placeholder="VD: 300">
+        </div>
+        <div class="field" id="fBotJ" style="display:none">
+          <label for="botJ">Cường độ phun dung dịch J (L/s·m²) <span class="req">*</span>
+            <span class="hint">Tra Bảng 1/2 TCVN 7336 theo loại chất cháy. Mặc định 0,2 (độ nở thấp)</span></label>
+          <input id="botJ" type="number" min="0" step="0.01" inputmode="decimal" value="0.2">
+        </div>
+        <div class="field" id="fBotT" style="display:none">
+          <label for="botT">Thời gian phun t (phút) <span class="req">*</span>
+            <span class="hint">Bảng 1 TCVN 7336. Mặc định 60′</span></label>
+          <input id="botT" type="number" min="0" step="1" inputmode="numeric" value="60">
+        </div>
+        <div class="field" id="fBotK" style="display:none">
+          <label for="botK">Hệ số dự trữ K <span class="req">*</span>
+            <span class="hint">Độ nở thấp K=2 · trung bình K=3 (TCVN 5307)</span></label>
+          <input id="botK" type="number" min="1" step="0.1" inputmode="decimal" value="2">
+        </div>
+        <div class="field" id="fBotCB" style="display:none">
+          <label for="botCB">Nồng độ chất tạo bọt C<sub>B</sub> (%) <span class="req">*</span>
+            <span class="hint">Theo nhãn chất tạo bọt (TCVN 7278-3)</span></label>
+          <select id="botCB">
+            <option value="1">1 %</option>
+            <option value="3" selected>3 %</option>
+            <option value="6">6 %</option>
+          </select>
+        </div>
         <div class="field full" id="fTangCuong" style="display:none;flex-direction:row;gap:10px;align-items:flex-start">
           <input type="checkbox" id="chkTangCuong" style="width:auto;margin-top:5px">
           <label for="chkTangCuong" style="font-weight:600;cursor:pointer">Có tính toán hệ thống sprinkler
@@ -432,8 +487,76 @@ ul.pos li{margin-bottom:2px}
 </div>
 </section>
 
-<section id="view-khi" class="view">
+<section id="view-congcu" class="view">
 <div class="wrap">
+
+  <!-- ============ TÍNH NƯỚC 💧 ============ -->
+  <div class="calc-panel active" id="calc-nuoc">
+    <header class="gas-head">
+      <div class="eyebrow2" style="color:var(--blue)">Chữa cháy bằng nước</div>
+      <h2>Tính dung tích bể nước chữa cháy</h2>
+      <p>Tính nhanh dung tích nước dự trữ theo lưu lượng và thời gian của từng hệ thống: họng nước trong nhà, chữa cháy tự động (sprinkler/drencher) và cấp nước ngoài nhà. Công thức: V = Q × t. Lưu lượng Q tra theo QCVN 06, TCVN 7336 — hoặc lấy từ tab "Hướng dẫn thiết kế".</p>
+      <div class="gas-tags"><span>QCVN 06 · Bảng 8/11/12</span><span>TCVN 7336:2021</span></div>
+    </header>
+    <div class="formula-card">
+      <div class="eq">V<sub>i</sub> = Q<sub>i</sub> × t<sub>i</sub> × 60&nbsp;&nbsp;·&nbsp;&nbsp;V<sub>tổng</sub> = ΣV<sub>i</sub></div>
+      <div class="eq-note">V: dung tích (lít) · Q: lưu lượng (L/s) · t: thời gian duy trì (phút) · ×60 để đổi phút→giây</div>
+    </div>
+    <form class="card no-print" id="frm-nuoc" novalidate>
+      <fieldset>
+        <legend>Họng nước chữa cháy trong nhà</legend>
+        <div class="grid">
+          <div class="field">
+            <label for="n-htn-n">Số tia phun đồng thời (tia)<span class="hint">VD 2 tia — tra Bảng 11/12 QCVN 06</span></label>
+            <input id="n-htn-n" type="number" min="0" step="1" inputmode="numeric" placeholder="VD: 2">
+          </div>
+          <div class="field">
+            <label for="n-htn-q">Lưu lượng mỗi tia (L/s)<span class="hint">Thường 2,5 hoặc 5 L/s</span></label>
+            <input id="n-htn-q" type="number" min="0" step="0.1" inputmode="decimal" placeholder="VD: 2.5">
+          </div>
+          <div class="field">
+            <label for="n-htn-t">Thời gian duy trì (phút)<span class="hint">Không sprinkler: 60′ · có sprinkler nhóm 1: 30′</span></label>
+            <input id="n-htn-t" type="number" min="0" step="1" inputmode="numeric" placeholder="VD: 60">
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Chữa cháy tự động (sprinkler / drencher)</legend>
+        <div class="grid">
+          <div class="field">
+            <label for="n-sp-q">Lưu lượng Q (L/s)<span class="hint">Tra Bảng 1/2/3 TCVN 7336 theo nhóm nguy cơ</span></label>
+            <input id="n-sp-q" type="number" min="0" step="0.1" inputmode="decimal" placeholder="VD: 30">
+          </div>
+          <div class="field">
+            <label for="n-sp-t">Thời gian phun (phút)<span class="hint">Thường 30′ hoặc 60′ (Bảng 1 TCVN 7336)</span></label>
+            <input id="n-sp-t" type="number" min="0" step="1" inputmode="numeric" placeholder="VD: 60">
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Cấp nước chữa cháy ngoài nhà</legend>
+        <div class="grid">
+          <div class="field">
+            <label for="n-nn-q">Lưu lượng Q (L/s)<span class="hint">Tra Bảng 8 QCVN 06</span></label>
+            <input id="n-nn-q" type="number" min="0" step="0.1" inputmode="decimal" placeholder="VD: 20">
+          </div>
+          <div class="field">
+            <label for="n-nn-t">Thời gian duy trì (phút)<span class="hint">Thường 180′ (3 giờ)</span></label>
+            <input id="n-nn-t" type="number" min="0" step="1" inputmode="numeric" value="180">
+          </div>
+        </div>
+      </fieldset>
+      <div class="gas-msg" id="n-msg" role="alert"></div>
+      <div class="actions">
+        <button type="submit" class="btn-main">Tính dung tích bể</button>
+        <button type="button" class="btn-ghost" data-reset="nuoc">Nhập lại</button>
+      </div>
+    </form>
+    <div class="gas-result" id="n-res" aria-live="polite"></div>
+  </div>
+
+  <!-- ============ TÍNH KHÍ 🧯 ============ -->
+  <div class="calc-panel" id="calc-khi">
 
   <!-- ============ SOL-KHÍ ============ -->
   <div class="gas-panel active" id="gas-solkhi">
@@ -632,14 +755,113 @@ ul.pos li{margin-bottom:2px}
     <div class="gas-result" id="ig-res" aria-live="polite"></div>
   </div>
 
+  </div><!-- /calc-khi -->
+
+  <!-- ============ TÍNH BỌT 🫧 ============ -->
+  <div class="calc-panel" id="calc-bot">
+    <header class="gas-head">
+      <div class="eyebrow2" style="color:var(--amber)">Chữa cháy bằng bọt</div>
+      <h2>Tính hệ thống chữa cháy bằng bọt (Foam)</h2>
+      <p>Tính lưu lượng dung dịch, lượng chất tạo bọt và nước dự trữ cho hệ thống bọt cố định (chữa cháy bể chứa / diện tích mặt thoáng). Công thức theo TCVN 5307 & TCVN 7278; cường độ phun và hệ số dự trữ đã cài mặc định theo độ nở, người dùng chỉnh được.</p>
+      <div class="gas-tags"><span>TCVN 5307:2009 · Phụ lục B</span><span>TCVN 7278-3:2025</span></div>
+    </header>
+    <div class="formula-card">
+      <div class="eq">Q<sub>ct</sub> = S<sub>c</sub> × J<sub>ct</sub>&nbsp;·&nbsp;W<sub>dd</sub> = K × Q<sub>ct</sub> × t × 60</div>
+      <div class="eq-note">Q<sub>ct</sub>: lưu lượng dung dịch (L/s) · S<sub>c</sub>: diện tích bề mặt cháy (m²) · J<sub>ct</sub>: cường độ phun (L/s·m²) · K: hệ số dự trữ · t: thời gian phun (phút)<br>W<sub>ctb</sub> = W<sub>dd</sub> × C<sub>B</sub>%&nbsp;·&nbsp;W<sub>nước</sub> = W<sub>dd</sub> × (100 − C<sub>B</sub>)%</div>
+    </div>
+    <form class="card no-print" id="frm-bot" novalidate>
+      <fieldset>
+        <legend>Thông số hệ thống</legend>
+        <div class="grid">
+          <div class="field full">
+            <label for="b-noden">Độ nở của bọt <span class="req">*</span>
+              <span class="hint">Tự điền cường độ, thời gian và hệ số dự trữ mặc định theo TCVN 5307 — chỉnh được bên dưới</span></label>
+            <select id="b-noden">
+              <option value="thap">Độ nở thấp — J=0,2 L/s·m² · t=20′ · K=2</option>
+              <option value="tb">Độ nở trung bình — J=0,25 L/s·m² · t=10′ · K=3</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="b-sc">Diện tích bề mặt cháy S<sub>c</sub> (m²) <span class="req">*</span>
+              <span class="hint">Bể chứa: lấy diện tích mặt thoáng (hoặc vành khuyên với mái nổi)</span></label>
+            <input id="b-sc" type="number" min="0" step="0.1" inputmode="decimal" placeholder="VD: 300">
+          </div>
+          <div class="field">
+            <label for="b-j">Cường độ phun J<sub>ct</sub> (L/s·m²) <span class="req">*</span>
+              <span class="hint">Mặc định theo độ nở; chỉnh nếu tiêu chuẩn/hồ sơ yêu cầu khác</span></label>
+            <input id="b-j" type="number" min="0" step="0.01" inputmode="decimal" value="0.2">
+          </div>
+          <div class="field">
+            <label for="b-t">Thời gian phun t (phút) <span class="req">*</span>
+              <span class="hint">Mặc định theo độ nở (thấp 20′ / TB 10′)</span></label>
+            <input id="b-t" type="number" min="0" step="1" inputmode="numeric" value="20">
+          </div>
+          <div class="field">
+            <label for="b-k">Hệ số dự trữ K <span class="req">*</span>
+              <span class="hint">Độ nở thấp K=2 · trung bình K=3 (Điều 5 TCVN 5307)</span></label>
+            <input id="b-k" type="number" min="1" step="0.1" inputmode="decimal" value="2">
+          </div>
+          <div class="field">
+            <label for="b-cb">Nồng độ chất tạo bọt C<sub>B</sub> (%) <span class="req">*</span>
+              <span class="hint">Theo nhãn chất tạo bọt: thường 1%, 3% hoặc 6% (TCVN 7278-3)</span></label>
+            <select id="b-cb">
+              <option value="1">1 %</option>
+              <option value="3" selected>3 %</option>
+              <option value="6">6 %</option>
+            </select>
+          </div>
+        </div>
+        <div class="gas-msg" id="b-msg" role="alert"></div>
+        <div class="actions">
+          <button type="submit" class="btn-main">Tính lượng bọt</button>
+          <button type="button" class="btn-ghost" data-reset="bot">Nhập lại</button>
+        </div>
+      </fieldset>
+    </form>
+    <div class="gas-result" id="b-res" aria-live="polite"></div>
+  </div>
+
 </div>
 </section>
 
-<section id="view-hoidap" class="view">
+<section id="view-aiho" class="view">
 <div class="wrap">
   <header class="gas-head">
-    <div class="eyebrow2" style="color:var(--red)">Hỏi đáp pháp lý PCCC</div>
-    <h2>Trợ lý hỏi đáp quy chuẩn, tiêu chuẩn PCCC</h2>
+    <div class="eyebrow2" style="color:var(--amber)">AI kiểm tra hồ sơ PCCC</div>
+    <h2>AI rà soát & kiểm tra hồ sơ thiết kế PCCC</h2>
+  </header>
+  <div class="ig-soon">
+    <div class="big">Sắp có</div>
+    <p>Chức năng AI đọc bản vẽ/thuyết minh và tự động đối chiếu với mẫu MĐC, phát hiện nội dung còn thiếu hoặc mâu thuẫn, soạn kiến nghị thiết kế đang được phát triển. Sẽ kết nối với quy trình rà soát bản vẽ và các mẫu đối chiếu B1–B14.</p>
+  </div>
+</div>
+</section>
+
+<section id="view-thuvien" class="view">
+<div class="wrap">
+  <header class="gas-head">
+    <div class="eyebrow2" style="color:var(--green)">Thư viện pháp luật PCCC</div>
+    <h2>Kho văn bản pháp luật, quy chuẩn, tiêu chuẩn PCCC</h2>
+    <p>Tra cứu và tải các văn bản pháp lý PCCC (nghị định, thông tư, QCVN, TCVN…). Nếu bảng dưới không hiển thị, bấm nút bên dưới để mở thư viện ở tab mới.</p>
+  </header>
+  <div class="lib-bar">
+    <a class="btn-main" style="text-decoration:none;display:inline-block" href="https://script.google.com/macros/s/AKfycbyjy9aTAZ-v0OYjT-51nJClRk-5iWBs7v05Yx6Vx1yOQGurODh8e33m240x75wo8ueU/exec" target="_blank" rel="noopener noreferrer">Mở thư viện ở tab mới ↗</a>
+    <span class="lib-hint">Thư viện được lưu trên Google Drive qua Google Apps Script.</span>
+  </div>
+  <div class="lib-frame-wrap">
+    <iframe class="lib-frame" id="lib-frame" src="https://script.google.com/macros/s/AKfycbyjy9aTAZ-v0OYjT-51nJClRk-5iWBs7v05Yx6Vx1yOQGurODh8e33m240x75wo8ueU/exec" title="Thư viện pháp luật PCCC" loading="lazy"></iframe>
+  </div>
+  <div class="note blue" style="margin-top:14px">
+    <b>Lưu ý:</b> Thư viện nhúng từ Google Apps Script. Một số cấu hình bảo mật của Google có thể chặn hiển thị trong khung nhúng — khi đó dùng nút "Mở thư viện ở tab mới" phía trên. Việc xem/tải file có thể yêu cầu đăng nhập tài khoản Google được cấp quyền.
+  </div>
+</div>
+</section>
+
+<section id="view-aitroly" class="view">
+<div class="wrap">
+  <header class="gas-head">
+    <div class="eyebrow2" style="color:var(--red)">AI trợ lý PCCC</div>
+    <h2>Trợ lý AI hỏi đáp quy chuẩn, tiêu chuẩn PCCC</h2>
     <p>Hai trợ lý AI đã được huấn luyện riêng trên bộ văn bản pháp lý PCCC (NĐ 105/2025, QCVN 10:2025/BCA, các TCVN liên quan). Chọn 1 trợ lý để mở cửa sổ hỏi đáp ở tab mới — cả hai nền tảng đều yêu cầu đăng nhập tài khoản (Google / OpenAI) đã được cấp quyền truy cập.</p>
   </header>
 
@@ -681,6 +903,8 @@ ul.pos li{margin-bottom:2px}
    ===================================================================== */
 
 const fmt = n => Number(n).toLocaleString("vi-VN");
+const nf1 = n => Number(n).toLocaleString("vi-VN",{minimumFractionDigits:1,maximumFractionDigits:1});
+const nf2 = n => Number(n).toLocaleString("vi-VN",{minimumFractionDigits:2,maximumFractionDigits:2});
 const R = (v, detail, canCu, notes) => ({ v, detail, canCu, notes: notes || [] });
 
 /* ---------- Danh mục công năng ---------- */
@@ -1158,8 +1382,16 @@ const B3_7336 = [ // [Hmax, {nhóm: Q}]
 ];
 function traSprinkler(d){
   const g = d.nhomNC;
-  if(g==="4.2") return { err:"Nhóm 4.2: KHÔNG áp dụng hệ chữa cháy tự động bằng nước — dùng hệ dung dịch chất tạo bọt (Bảng 1 TCVN 7336, lưu lượng bọt ≥ 65 L/s) — ngoài phạm vi tính nước của phiếu." };
-  if(g==="7")   return { err:"Nhóm 7 (kho vecni, sơn, chất lỏng cháy): KHÔNG áp dụng hệ bằng nước — dùng hệ bọt (Bảng 2 TCVN 7336) — ngoài phạm vi tính nước của phiếu." };
+  if(g==="4.2"||g==="7"){
+    // Hệ chữa cháy bằng bọt: Q_ct = S·J ; W_dd = K·Q_ct·t·60
+    const S=d.botS, J=d.botJ, t=d.botT, K=d.botK, CB=d.botCB;
+    const Qct = S*J;
+    const Wdd = K*Qct*t*60;            // lít dung dịch
+    const Wctb = Wdd*CB/100;           // lít chất tạo bọt đậm đặc
+    const Wnuoc = Wdd*(100-CB)/100;    // lít nước
+    const mucNhom = g==="4.2" ? "Bảng 1 TCVN 7336 (nhóm 4.2 — khí cháy/xăng/cồn)" : "Bảng 2 TCVN 7336 (nhóm 7 — kho vecni, sơn, chất lỏng cháy)";
+    return { foam:true, S, J, t, K, CB, Qct, Wdd, Wctb, Wnuoc, muc:`${mucNhom}; công thức bọt theo TCVN 5307` };
+  }
   if(g==="5"||g==="6"){
     if(d.hXep==="cao") return { kekcao:true };
     const Q = B2_7336[g][d.hXep];
@@ -1182,13 +1414,25 @@ function evalNuoc(d, sp, hn, nn){
   const trich=[], freeze=[], notes=[], errs=[];
   const kq = { Vtn:null, Vnn:null, Vtd:null, Qtn:null, Qnn:null, Qtd:null, tTn:null, tTd:null };
 
-  const coSpr = sp.v==="yes" || d.tangCuong;
+  const isBotGroup = ["4.2","7"].includes(d.nhomNC);
+  const coSpr = sp.v==="yes" || d.tangCuong || isBotGroup;
+  const kqBot = { Wdd:null, Wctb:null, Wnuoc:null, Qct:null };
 
   /* --- Chữa cháy tự động (tính trước để biết t họng) --- */
   let sprRes = null;
   if(coSpr){
     sprRes = traSprinkler(d);
     if(sprRes.err){ errs.push(sprRes.err); }
+    else if(sprRes.foam){
+      kqBot.Qct=sprRes.Qct; kqBot.Wdd=sprRes.Wdd; kqBot.Wctb=sprRes.Wctb; kqBot.Wnuoc=sprRes.Wnuoc;
+      kq.tTd = sprRes.t;
+      trich.push(["Lưu lượng dung dịch bọt Q_ct = S × J", `${nf1(sprRes.Qct)} L/s (S=${fmt(sprRes.S)} m² × J=${nf2(sprRes.J)})`, sprRes.muc]);
+      trich.push(["Thời gian phun bọt t", `${sprRes.t} phút`, sprRes.muc]);
+      trich.push(["Lượng dung dịch bọt W_dd = K·Q_ct·t·60", `${nf2(sprRes.Wdd/1000)} m³ (K=${nf1(sprRes.K)})`, "TCVN 5307, Phụ lục B"]);
+      trich.push(["→ Chất tạo bọt đậm đặc (C_B=" + fmt(sprRes.CB) + "%)", `${fmt(Math.round(sprRes.Wctb))} L`, "TCVN 7278-3"]);
+      trich.push(["→ Nước pha bọt (" + fmt(100-sprRes.CB) + "%)", `${nf2(sprRes.Wnuoc/1000)} m³`, "—"]);
+      notes.push("Nhóm nguy cơ " + d.nhomNC + " dùng hệ chữa cháy bằng BỌT (không phải sprinkler nước). Cường độ J, thời gian t tra Bảng 1/2 TCVN 7336 theo loại chất cháy cụ thể — giá trị đang dùng là mặc định/người dùng nhập, cần đối chiếu khi thiết kế.");
+    }
     else if(sprRes.kekcao){
       notes.push("Kho kệ cao (h > 5,5 m đến 25 m): tính QS/QD/QTN theo TCVN 14496:2025 — module riêng, KHÔNG tính trong phiếu sơ bộ. Vtd để trống.");
     } else {
@@ -1235,6 +1479,7 @@ function evalNuoc(d, sp, hn, nn){
   freeze.push(["Số tầng / khối tích", `${d.floorsNoi} tầng nổi${d.semiBasements>0?" + "+d.semiBasements+" bán hầm (tính toán: "+d.floors+" tầng)":""}${d.basements>0?" + "+d.basements+" hầm":""} / ${fmt(d.volume)} m³`]);
   freeze.push(["Có sprinkler", coSpr ? (sp.v==="yes"?"Có (bắt buộc theo Bảng A.1)":"Có (tính theo yêu cầu người dùng)") : "Không"]);
   if(d.nhomNC) freeze.push(["Nhóm nguy cơ cháy", "Nhóm "+d.nhomNC+" (Phụ lục A TCVN 7336)"]);
+  if(isBotGroup) freeze.push(["Thông số bọt (S / J / t / K / C_B)", `${fmt(d.botS)} m² / ${nf2(d.botJ)} L/s·m² / ${fmt(d.botT)}′ / K=${nf1(d.botK)} / ${fmt(d.botCB)}%`]);
   if(d.occ==="chungcu"&&d.corridor) freeze.push(["Hành lang chung", d.corridor==="gt10"?"> 10 m":"≤ 10 m"]);
   if(["sanxuat","kho"].includes(d.occ)) freeze.push(["Bậc chịu lửa / cấp S / hạng", `${d.bcl} / ${d.capS} / ${d.hazard}`]);
   if(["5","6","7"].includes(d.nhomNC)&&d.hXep) freeze.push(["Chiều cao xếp hàng h", ({"1":"đến 1 m","2":"1–2 m","3":"2–3 m","4":"3–4 m","5.5":"4–5,5 m",cao:"> 5,5 m (kệ cao)"})[d.hXep]]);
@@ -1244,9 +1489,10 @@ function evalNuoc(d, sp, hn, nn){
   if(kq.Qtn!==null) kq.Vtn = kq.Qtn*kq.tTn*60;
   if(kq.Qnn!==null) kq.Vnn = kq.Qnn*180*60;
   if(kq.Qtd!==null) kq.Vtd = kq.Qtd*kq.tTd*60;
-  kq.Vtong = (kq.Vtn||0)+(kq.Vnn||0)+(kq.Vtd||0);
+  kq.Vbot = kqBot.Wdd;  // dung dịch bọt (lít)
+  kq.Vtong = (kq.Vtn||0)+(kq.Vnn||0)+(kq.Vtd||0)+(kq.Vbot||0);
 
-  return { trich, freeze, kq, notes, errs, coSpr };
+  return { trich, freeze, kq, kqBot, notes, errs, coSpr };
 }
 
 /* =====================================================================
@@ -1276,13 +1522,15 @@ function updateWaterUI(){
   if(!on) return;
   const occId = occSel.value;
   const g = $("nhomNC").value;
-  $("fHXep").style.display = ["5","6","7"].includes(g) ? "" : "none";
-  $("fHBaoVe").style.display = ["5","6","7"].includes(g) ? "none" : "";
+  $("fHXep").style.display = ["5","6"].includes(g) ? "" : "none";
+  $("fHBaoVe").style.display = (["5","6","7","4.2"].includes(g)) ? "none" : "";
   $("fCorridor").style.display = occId==="chungcu" ? "" : "none";
   const sxKho = ["sanxuat","kho"].includes(occId);
   $("fBCL").style.display = sxKho ? "" : "none";
   $("fCapS").style.display = sxKho ? "" : "none";
-  $("fTangCuong").style.display = "";
+  const isBot = ["4.2","7"].includes(g);
+  ["fBotNote","fBotS","fBotJ","fBotT","fBotK","fBotCB"].forEach(id=>$(id).style.display = isBot ? "" : "none");
+  $("fTangCuong").style.display = isBot ? "none" : "";
 }
 $("chkNuoc").addEventListener("change", updateWaterUI);
 $("floors").addEventListener("input", updateGaraUI);
@@ -1349,7 +1597,8 @@ function gather(){
     tinhNuoc: $("chkNuoc").checked,
     nhomNC: $("nhomNC").value, hXep: $("hXep").value, hBaoVe: num("hBaoVe"),
     corridor: $("corridor").value, bcl: $("bcl").value, capS: $("capS").value,
-    tangCuong: $("chkTangCuong").checked
+    tangCuong: $("chkTangCuong").checked,
+    botS: num("botS"), botJ: num("botJ"), botT: num("botT"), botK: num("botK"), botCB: Number($("botCB").value)
   };
   [["floorsNoi","floors","Số tầng nổi"],["areaFloor","areaFloor","Diện tích 1 tầng"],["totalArea","totalArea","Tổng diện tích sàn ΣF"],["volume","volume","Tổng khối tích V"],["hFire","hFire","Chiều cao PCCC"]].forEach(([key,id,lb])=>{
     const bad = d[key]===null || isNaN(d[key]) || d[key]<0 || (id!=="hFire" && d[key]<=0);
@@ -1383,7 +1632,13 @@ function gather(){
   /* Kiểm tra dữ liệu tính nước (chỉ khi bật) */
   if(d.tinhNuoc && !errs.length){
     if(!d.nhomNC){ mark("nhomNC",true); errs.push("Nhóm nguy cơ cháy (Phụ lục A TCVN 7336)"); } else mark("nhomNC",false);
-    if(["5","6","7"].includes(d.nhomNC) && !d.hXep){ mark("hXep",true); errs.push("Chiều cao xếp hàng h (kho nhóm 5–7)"); }
+    if(["5","6"].includes(d.nhomNC) && !d.hXep){ mark("hXep",true); errs.push("Chiều cao xếp hàng h (kho nhóm 5–6)"); }
+    if(["4.2","7"].includes(d.nhomNC)){
+      if(d.botS===null||d.botS<=0){ mark("botS",true); errs.push("Diện tích tính toán chữa cháy bọt S"); } else mark("botS",false);
+      if(d.botJ===null||d.botJ<=0){ mark("botJ",true); errs.push("Cường độ phun bọt J"); } else mark("botJ",false);
+      if(d.botT===null||d.botT<=0){ mark("botT",true); errs.push("Thời gian phun bọt t"); } else mark("botT",false);
+      if(d.botK===null||d.botK<1){ mark("botK",true); errs.push("Hệ số dự trữ K"); } else mark("botK",false);
+    }
     if(d.occ==="chungcu" && !d.corridor){ mark("corridor",true); errs.push("Chiều dài hành lang chung (nhà ở)"); }
     if(["sanxuat","kho"].includes(d.occ)){
       if(!d.bcl){ mark("bcl",true); errs.push("Bậc chịu lửa (tra Bảng 12)"); }
@@ -1450,7 +1705,8 @@ function render(d){
           ${kqLine("Vtn — họng nước trong nhà",nc.kq.Vtn,nc.kq.Qtn,nc.kq.tTn)}
           ${kqLine("Vnn — cấp nước ngoài nhà",nc.kq.Vnn,nc.kq.Qnn,180)}
           ${kqLine("Vtd — chữa cháy tự động",nc.kq.Vtd,nc.kq.Qtd,nc.kq.tTd)}
-          <tr><td colspan="2"><b>V_total = Vtn + Vnn + Vtd</b></td><td><b style="color:var(--red-deep);font-size:16px">${L2m3(nc.kq.Vtong)}</b></td></tr>
+          ${nc.kq.Vbot!==null ? `<tr><td><b>Vbọt — dung dịch bọt chữa cháy</b><br><span style="font-size:12px;color:var(--ink-soft)">gồm ${fmt(Math.round(nc.kqBot.Wctb))} L chất tạo bọt + ${nf2(nc.kqBot.Wnuoc/1000)} m³ nước</span></td><td>K × Q_ct × t × 60</td><td><b>${L2m3(nc.kq.Vbot)}</b></td></tr>` : ""}
+          <tr><td colspan="2"><b>V_total = Vtn + Vnn + Vtd${nc.kq.Vbot!==null?" + Vbọt":""}</b></td><td><b style="color:var(--red-deep);font-size:16px">${L2m3(nc.kq.Vtong)}</b></td></tr>
         </table></div>
         <p style="font-size:13.5px;margin-top:10px">Lưu lượng bơm chữa cháy sơ bộ: ≥ Qtn + Qtđ khi các hệ trong nhà dùng chung trạm bơm${nc.kq.Qtn!==null&&nc.kq.Qtd!==null?` (≥ ${nc.kq.Qtn+nc.kq.Qtd} L/s)`:""}; cột áp bơm xác định theo tính toán thủy lực mạng ống — ngoài phạm vi phiếu sơ bộ.</p>
         ${nc.errs.length ? nc.errs.map(e=>`<div class="note" style="border-left-color:var(--red);background:var(--red-wash);border-color:#E3B9BA">${e}</div>`).join("") : ""}
@@ -1613,8 +1869,15 @@ $("btnReset").addEventListener("click", () => {
     q(id).scrollIntoView({behavior:"smooth",block:"nearest"});
   }
 
-  /* ---- Chuyển tab chính ---- */
-  const subnav = q("subnav");
+  /* ---- Điều hướng: tab chính + 2 cấp subnav ---- */
+  const subCongcu = q("subnav-congcu");
+  const subKhi = q("subnav-khi");
+  function syncKhiSubnav(){
+    // subnav-khi chỉ hiện khi đang ở view congcu VÀ chọn loại "khi"
+    const congcuActive = q("view-congcu").classList.contains("active");
+    const khiCalcActive = q("calc-khi").classList.contains("active");
+    subKhi.hidden = !(congcuActive && khiCalcActive);
+  }
   document.querySelectorAll(".tab").forEach(t=>{
     t.addEventListener("click", ()=>{
       document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
@@ -1622,21 +1885,86 @@ $("btnReset").addEventListener("click", () => {
       const v=t.dataset.view;
       document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
       q("view-"+v).classList.add("active");
-      subnav.hidden = (v!=="khi");
+      subCongcu.hidden = (v!=="congcu");
+      syncKhiSubnav();
       window.scrollTo({top:0,behavior:"smooth"});
     });
   });
-  /* ---- Chuyển loại khí ---- */
-  document.querySelectorAll(".subtab").forEach(t=>{
+  /* ---- Chọn loại hình tính (nước / khí / bọt) ---- */
+  subCongcu.querySelectorAll(".subtab").forEach(t=>{
+    t.addEventListener("click", ()=>{
+      subCongcu.querySelectorAll(".subtab").forEach(x=>x.classList.remove("active"));
+      t.classList.add("active");
+      const c=t.dataset.calc;
+      document.querySelectorAll(".calc-panel").forEach(x=>x.classList.remove("active"));
+      q("calc-"+c).classList.add("active");
+      syncKhiSubnav();
+      window.scrollTo({top:0,behavior:"smooth"});
+    });
+  });
+  /* ---- Chọn loại khí (Sol-khí / CO₂ / FM200 / IG) ---- */
+  subKhi.querySelectorAll(".subtab").forEach(t=>{
     t.addEventListener("click", ()=>{
       if(t.disabled) return;
-      document.querySelectorAll(".subtab").forEach(x=>x.classList.remove("active"));
+      subKhi.querySelectorAll(".subtab").forEach(x=>x.classList.remove("active"));
       t.classList.add("active");
       const g=t.dataset.gas;
       document.querySelectorAll(".gas-panel").forEach(x=>x.classList.remove("active"));
       q("gas-"+g).classList.add("active");
       window.scrollTo({top:0,behavior:"smooth"});
     });
+  });
+
+  /* ---- TÍNH NƯỚC: V = Q × t × 60 ---- */
+  q("frm-nuoc").addEventListener("submit", e=>{
+    e.preventDefault();
+    const htnN=val("n-htn-n")??0, htnQ=val("n-htn-q")??0, htnT=val("n-htn-t")??0;
+    const spQ=val("n-sp-q")??0, spT=val("n-sp-t")??0;
+    const nnQ=val("n-nn-q")??0, nnT=val("n-nn-t")??0;
+    const Qtn=htnN*htnQ, Vtn=Qtn*htnT*60;
+    const Vsp=spQ*spT*60;
+    const Vnn=nnQ*nnT*60;
+    const Vtong=Vtn+Vsp+Vnn;
+    if(Vtong<=0){ showMsg("n-msg","Chưa nhập đủ dữ liệu cho hệ thống nào — nhập ít nhất 1 hệ thống có lưu lượng và thời gian > 0."); q("n-res").classList.remove("show"); return; }
+    hideMsg("n-msg");
+    const m3 = v => nf(v/1000,2)+" m³";
+    let rows="";
+    if(Vtn>0) rows+=row("Họng trong nhà: "+nf(htnN,0)+" tia × "+nf(htnQ,1)+" L/s = "+nf(Qtn,1)+" L/s × "+nf(htnT,0)+"′", m3(Vtn));
+    if(Vsp>0) rows+=row("Chữa cháy tự động: "+nf(spQ,1)+" L/s × "+nf(spT,0)+"′", m3(Vsp));
+    if(Vnn>0) rows+=row("Ngoài nhà: "+nf(nnQ,1)+" L/s × "+nf(nnT,0)+"′", m3(Vnn));
+    renderResult("n-res", rows, "Tổng dung tích bể nước", nf(Vtong/1000,2)+" m³");
+  });
+
+  /* ---- TÍNH BỌT: Q_ct = S_c·J_ct ; W_dd = K·Q_ct·t·60 ---- */
+  const BOT_DEFAULT = { thap:{J:0.2,t:20,K:2}, tb:{J:0.25,t:10,K:3} };
+  q("b-noden").addEventListener("change", ()=>{
+    const d=BOT_DEFAULT[q("b-noden").value];
+    q("b-j").value=d.J; q("b-t").value=d.t; q("b-k").value=d.K;
+  });
+  q("frm-bot").addEventListener("submit", e=>{
+    e.preventDefault();
+    const Sc=val("b-sc"), J=val("b-j"), t=val("b-t"), K=val("b-k"), CB=Number(q("b-cb").value);
+    const errs=[];
+    if(Sc===null||Sc<=0) errs.push("S_c (> 0)");
+    if(J===null||J<=0) errs.push("J_ct (> 0)");
+    if(t===null||t<=0) errs.push("t (> 0)");
+    if(K===null||K<1) errs.push("K (≥ 1)");
+    if(errs.length){ showMsg("b-msg","<b>Thiếu/sai dữ liệu:</b> "+errs.join("; ")+"."); q("b-res").classList.remove("show"); return; }
+    hideMsg("b-msg");
+    const Qct = Sc*J;                    // L/s — lưu lượng dung dịch
+    const Wdd = K*Qct*t*60;              // lít — lượng dung dịch dự trữ (đã gồm hệ số K)
+    const Wctb = Wdd*CB/100;             // lít — chất tạo bọt đậm đặc
+    const Wnuoc = Wdd*(100-CB)/100;      // lít — nước
+    const m3 = v => nf(v/1000,2)+" m³";
+    renderResult("b-res",
+      row("Lưu lượng dung dịch Q_ct = S_c × J_ct", nf(Qct,2)+" L/s")+
+      row("Cường độ phun J_ct", nf(J,2)+" L/s·m²")+
+      row("Thời gian phun t", nf(t,0)+" phút")+
+      row("Hệ số dự trữ K", nf(K,1))+
+      row("Lượng dung dịch W_dd = K·Q_ct·t·60", m3(Wdd)+" ("+nf(Wdd,0)+" L)")+
+      row("→ Chất tạo bọt đậm đặc (C_B = "+nf(CB,0)+"%)", nf(Wctb,0)+" L")+
+      row("→ Nước pha ("+nf(100-CB,0)+"%)", m3(Wnuoc)),
+      "Tổng dung dịch bọt cần dự trữ", m3(Wdd));
   });
 
   /* ---- SOL-KHÍ: m = d₁ × f₂ × V ---- */
@@ -1705,6 +2033,8 @@ $("btnReset").addEventListener("click", () => {
   document.querySelectorAll("[data-reset]").forEach(b=>{
     b.addEventListener("click", ()=>{
       const g=b.dataset.reset;
+      if(g==="nuoc"){ q("frm-nuoc").reset(); q("n-nn-t").value="180"; hideMsg("n-msg"); q("n-res").classList.remove("show"); }
+      if(g==="bot"){ q("frm-bot").reset(); q("b-noden").value="thap"; q("b-j").value="0.2"; q("b-t").value="20"; q("b-k").value="2"; q("b-cb").value="3"; hideMsg("b-msg"); q("b-res").classList.remove("show"); }
       if(g==="solkhi"){ q("frm-solkhi").reset(); q("sk-f2").value="1.0"; hideMsg("sk-msg"); q("sk-res").classList.remove("show"); }
       if(g==="co2"){ q("frm-co2").reset(); q("co2-kb").value="1.0"; ["co2-aov","co2-vz","co2-vg"].forEach(id=>q(id).value="0"); hideMsg("co2-msg"); q("co2-res").classList.remove("show"); }
       if(g==="fm200"){ q("frm-fm200").reset(); q("fm-t").value="20"; hideMsg("fm-msg"); q("fm-res").classList.remove("show"); }
